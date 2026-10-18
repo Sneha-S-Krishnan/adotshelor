@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 
@@ -12,12 +12,34 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
+export const viewport: Viewport = {
+  themeColor: "#ffffff",
+  width: "device-width",
+  initialScale: 1,
+};
+
 export const metadata: Metadata = {
   title: "AdotShelor.com — Software & Technology",
   description:
     "Official portfolio of AdotShelor.com. Engineering modern software solutions, digital products, and technology architecture.",
+  metadataBase: new URL("https://adotshelor.com"),
   icons: {
     icon: "/favicon.ico",
+  },
+  openGraph: {
+    title: "AdotShelor.com — Software & Technology",
+    description:
+      "Official portfolio of AdotShelor.com. Engineering modern software solutions, digital products, and technology architecture.",
+    url: "https://adotshelor.com",
+    siteName: "AdotShelor.com",
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "AdotShelor.com — Software & Technology",
+    description:
+      "Official portfolio of AdotShelor.com. Engineering modern software solutions, digital products, and technology architecture.",
   },
 };
 

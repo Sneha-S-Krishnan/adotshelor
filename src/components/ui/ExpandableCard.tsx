@@ -30,35 +30,29 @@ const accentMap: Record<
     expandedPanel: string;
   }
 > = {
-  cyan: {
-    border: "hover:border-cyan-300 focus-within:border-cyan-400",
-    iconBg: "bg-cyan-50 text-cyan-700 border-cyan-100",
-    expandBtn: "text-cyan-700 hover:text-cyan-800 hover:bg-cyan-50",
-    expandedPanel: "bg-cyan-50/40 border-cyan-100/80",
+  teal: {
+    border: "hover:border-[#147D78]/60 focus-within:border-[#147D78]",
+    iconBg: "bg-[#E7F3F2] text-[#147D78] border-[#147D78]/25",
+    expandBtn: "text-[#147D78] hover:text-[#0F635F] hover:bg-[#E7F3F2]",
+    expandedPanel: "bg-[#E7F3F2]/40 border-[#147D78]/25",
   },
-  purple: {
-    border: "hover:border-purple-300 focus-within:border-purple-400",
-    iconBg: "bg-purple-50 text-purple-700 border-purple-100",
-    expandBtn: "text-purple-700 hover:text-purple-800 hover:bg-purple-50",
-    expandedPanel: "bg-purple-50/40 border-purple-100/80",
+  amber: {
+    border: "hover:border-[#D6A45D]/60 focus-within:border-[#D6A45D]",
+    iconBg: "bg-[#FBF4EB] text-[#A8742A] border-[#D6A45D]/30",
+    expandBtn: "text-[#A8742A] hover:text-[#8C5D1E] hover:bg-[#FBF4EB]",
+    expandedPanel: "bg-[#FBF4EB]/40 border-[#D6A45D]/30",
   },
-  pink: {
-    border: "hover:border-pink-300 focus-within:border-pink-400",
-    iconBg: "bg-pink-50 text-pink-700 border-pink-100",
-    expandBtn: "text-pink-700 hover:text-pink-800 hover:bg-pink-50",
-    expandedPanel: "bg-pink-50/40 border-pink-100/80",
+  navy: {
+    border: "hover:border-[#14263D]/60 focus-within:border-[#14263D]",
+    iconBg: "bg-[#F7F5F0] text-[#14263D] border-[#14263D]/20",
+    expandBtn: "text-[#14263D] hover:bg-[#EBE7DE]/60",
+    expandedPanel: "bg-[#F7F5F0] border-[#E2DDD5]",
   },
-  mint: {
-    border: "hover:border-emerald-300 focus-within:border-emerald-400",
-    iconBg: "bg-emerald-50 text-emerald-700 border-emerald-100",
-    expandBtn: "text-emerald-700 hover:text-emerald-800 hover:bg-emerald-50",
-    expandedPanel: "bg-emerald-50/40 border-emerald-100/80",
-  },
-  blue: {
-    border: "hover:border-blue-300 focus-within:border-blue-400",
-    iconBg: "bg-blue-50 text-blue-700 border-blue-100",
-    expandBtn: "text-blue-700 hover:text-blue-800 hover:bg-blue-50",
-    expandedPanel: "bg-blue-50/40 border-blue-100/80",
+  slate: {
+    border: "hover:border-[#647184]/60 focus-within:border-[#647184]",
+    iconBg: "bg-[#FAF8F5] text-[#647184] border-[#E2DDD5]",
+    expandBtn: "text-[#647184] hover:text-[#14263D] hover:bg-[#EBE7DE]/40",
+    expandedPanel: "bg-[#FAF8F5] border-[#E2DDD5]",
   },
 };
 
@@ -68,7 +62,7 @@ export function ExpandableCard({
   category,
   statusBadge,
   isPlaceholder = false,
-  accentColor = "cyan",
+  accentColor = "teal",
   icon,
   tags,
   externalUrl,

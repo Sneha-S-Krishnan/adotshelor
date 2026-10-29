@@ -1,372 +1,336 @@
 "use client";
 
 import React, { useState } from "react";
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { Button } from "@/components/ui/Button";
 import { CONTACT_CHANNELS } from "@/data/portfolioData";
+import { Mail, Send, CheckCircle2, AlertCircle, ArrowUpRight } from "lucide-react";
 
 interface FormState {
   name: string;
   email: string;
+  serviceInterest: "problem" | "build" | "understand" | "general";
   subject: string;
   message: string;
-}
-
-interface FormErrors {
-  name?: string;
-  email?: string;
-  subject?: string;
-  message?: string;
+  hp_company?: string;
 }
 
 export function ContactSection() {
   const [formData, setFormData] = useState<FormState>({
     name: "",
     email: "",
+    serviceInterest: "problem",
     subject: "",
     message: "",
+    hp_company: "",
   });
 
-  const [errors, setErrors] = useState<FormErrors>({});
-  const [submissionFeedback, setSubmissionFeedback] = useState<{
-    show: boolean;
-    mailtoUrl?: string;
-  }>({ show: false });
-
-  const validate = (): boolean => {
-    const newErrors: FormErrors = {};
-
-    if (!formData.name.trim()) {
-      newErrors.name = "Please provide your name.";
-    }
-
-    if (!formData.email.trim()) {
-      newErrors.email = "Please provide your email address.";
-    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email.trim())) {
-      newErrors.email = "Please provide a valid email address.";
-    }
-
-    if (!formData.subject.trim()) {
-      newErrors.subject = "Please specify a subject.";
-    }
-
-    if (!formData.message.trim()) {
-      newErrors.message = "Please write a brief message.";
-    } else if (formData.message.trim().length < 10) {
-      newErrors.message = "Message must be at least 10 characters long.";
-    }
-
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-
-    if (!validate()) {
-      setSubmissionFeedback({ show: false });
-      return;
-    }
-
-    // Construct honest mailto link since backend service is not yet connected
-    const encodedSubject = encodeURIComponent(
-      `[AdotShelor Inquiry] ${formData.subject}`
-    );
-    const encodedBody = encodeURIComponent(
-      `Hello AdotShelor,\n\nName: ${formData.name}\nEmail: ${formData.email}\n\nMessage:\n${formData.message}\n`
-    );
-    const mailtoUrl = `mailto:contact@adotshelor.com?subject=${encodedSubject}&body=${encodedBody}`;
-
-    setSubmissionFeedback({
-      show: true,
-      mailtoUrl,
-    });
-  };
+  const [loading, setLoading] = useState(false);
+  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [feedbackMessage, setFeedbackMessage] = useState<string>("");
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    if (errors[name as keyof FormErrors]) {
-      setErrors((prev) => ({ ...prev, [name]: undefined }));
+  };
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    setStatus("idle");
+    setFeedbackMessage("");
+
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(formData),
+      });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Submission failed");
+      }
+
+      setStatus("success");
+      setFeedbackMessage(data.message || "Thank you. Your message was received.");
+      setFormData({
+        name: "",
+        email: "",
+        serviceInterest: "problem",
+        subject: "",
+        message: "",
+        hp_company: "",
+      });
+    } catch (err: unknown) {
+      setStatus("error");
+      const msg = err instanceof Error ? err.message : "Something went wrong.";
+      setFeedbackMessage(msg);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
     <section
       id="contact"
-      className="py-20 sm:py-28 border-t border-slate-200/70 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+      className="py-20 sm:py-28 bg-[#060D17] text-white relative overflow-hidden border-t border-[var(--hair-soft)]"
     >
-      <SectionHeading
-        badge="Contact"
-        badgeAccent="blue"
-        title={
-          <>
-            Start a Conversation &{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-cyan-600">
-              Get in Touch
-            </span>
-          </>
-        }
-        subtitle="Reach out regarding software initiatives, technical advisory, or engineering collaborations. Direct email channels and form validation available below."
+      {/* Background ambient cyan glow */}
+      <div
+        className="absolute bottom-0 right-1/4 w-[600px] h-[400px] bg-[#00d2ee]/8 rounded-full blur-[160px] pointer-events-none"
+        aria-hidden="true"
       />
 
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
-        {/* Left Column: Direct Email & Status Notice */}
-        <div className="lg:col-span-5 space-y-6">
-          <div className="p-7 rounded-3xl bg-white border border-slate-200/80 shadow-xs">
-            <h3 className="text-xl font-bold text-slate-900 tracking-tight">
-              Direct Contact Channels
-            </h3>
-            <p className="mt-2.5 text-sm text-slate-600 leading-relaxed">
-              We welcome technical inquiries, product discussions, and architecture
-              consultations. Contact us directly through official email:
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-start">
+          {/* Left Column: Scene 06 Invitation Narrative */}
+          <div className="lg:col-span-5 space-y-6">
+            <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[rgba(0,210,238,0.12)] text-[#00d2ee] border border-[rgba(0,210,238,0.28)]">
+              Scene 06 • The Invitation
+            </span>
+
+            <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
+              Have Something in Mind?
+            </h2>
+
+            <p className="text-base sm:text-lg text-white/70 leading-relaxed">
+              Bring us a problem, an idea, or a project you&apos;d like to understand
+              better. You&apos;ll speak directly with lead software engineers who
+              build and guide solutions every day.
             </p>
 
-            <div className="mt-6 space-y-3">
+            {/* Direct Contact Channels */}
+            <div className="pt-4 space-y-3">
+              <h3 className="text-xs font-bold uppercase tracking-wider text-[#00d2ee]">
+                Direct Official Channels
+              </h3>
+
               {CONTACT_CHANNELS.map((channel) => (
                 <div
                   key={channel.label}
-                  className="p-3.5 rounded-xl bg-slate-50 border border-slate-200/80 flex items-center justify-between"
+                  className="p-3.5 rounded-xl bg-[rgba(11,25,44,0.55)] backdrop-blur-md border border-[var(--hair)] flex items-center justify-between"
                 >
                   <div>
-                    <span className="block text-xs font-semibold text-slate-500 uppercase tracking-wider">
+                    <span className="block text-[11px] text-white/50 font-mono">
                       {channel.label}
                     </span>
                     <a
                       href={channel.href}
-                      className="text-sm font-bold text-cyan-700 hover:text-cyan-800 transition-colors"
+                      className="text-sm font-bold text-white hover:text-[#00d2ee] transition-colors"
                     >
                       {channel.value}
                     </a>
                   </div>
                   <a
                     href={channel.href}
-                    className="p-2 rounded-lg bg-white border border-slate-200/70 text-cyan-700 hover:bg-cyan-50 transition-colors"
+                    className="p-2 rounded-lg bg-white/10 text-white hover:bg-[#0284c7] transition-colors"
                     aria-label={`Send email to ${channel.value}`}
                   >
-                    <svg
-                      className="w-4 h-4"
-                      fill="none"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                      aria-hidden="true"
-                    >
-                      <path
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        strokeWidth={2}
-                        d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                      />
-                    </svg>
+                    <Mail className="w-4 h-4" />
                   </a>
                 </div>
               ))}
             </div>
 
-            {/* Honest Backend Service Notice */}
-            <div className="mt-6 p-4 rounded-xl bg-amber-50/70 border border-amber-200/80">
-              <div className="flex items-start gap-2.5">
-                <span className="text-amber-600 font-bold text-sm shrink-0">
-                  ℹ
-                </span>
-                <p className="text-xs text-amber-800 leading-relaxed">
-                  <strong>Service Notice:</strong> Automated contact routing is
-                  in pre-launch testing. For guaranteed response, please email{" "}
-                  <a
-                    href="mailto:contact@adotshelor.com"
-                    className="underline font-semibold hover:text-amber-950"
-                  >
-                    contact@adotshelor.com
-                  </a>{" "}
-                  directly.
-                </p>
-              </div>
+            {/* Quiet Reassurance */}
+            <div className="pt-2 flex flex-col gap-2 text-xs text-white/50">
+              <span className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#00d2ee]" />
+                Direct engineer dialogue • No sales reps
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-[#38bdf8]" />
+                Non-disclosure agreements honored
+              </span>
             </div>
           </div>
-        </div>
 
-        {/* Right Column: Accessible Form */}
-        <div className="lg:col-span-7 p-7 sm:p-9 rounded-3xl bg-white border border-slate-200/80 shadow-xs">
-          <h3 className="text-xl font-bold text-slate-900 tracking-tight">
-            Send an Inquiry
-          </h3>
-          <p className="mt-1 text-sm text-slate-600">
-            Fill out the fields below. Client-side validation ensures all required
-            information is formatted cleanly.
-          </p>
+          {/* Right Column: Contact Inquiry Form in Deep Navy Glass */}
+          <div className="lg:col-span-7 bg-[rgba(11,25,44,0.65)] backdrop-blur-2xl p-6 sm:p-9 rounded-3xl border border-[var(--hair)] shadow-2xl">
+            <h3 className="text-xl sm:text-2xl font-bold tracking-tight text-white">
+              Start a Conversation
+            </h3>
+            <p className="mt-1 text-xs sm:text-sm text-white/60">
+              Share a few details below. We review every submission personally.
+            </p>
 
-          <form onSubmit={handleSubmit} noValidate className="mt-6 space-y-4">
-            {/* Name Field */}
-            <div>
-              <label
-                htmlFor="contact-name"
-                className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5"
-              >
-                Your Name <span className="text-rose-500">*</span>
-              </label>
-              <input
-                id="contact-name"
-                name="name"
-                type="text"
-                value={formData.name}
-                onChange={handleChange}
-                placeholder="Alex Morgan"
-                aria-invalid={!!errors.name}
-                aria-describedby={errors.name ? "name-error" : undefined}
-                className={`w-full px-4 py-2.5 text-sm rounded-xl border bg-slate-50/60 transition-colors focus:bg-white focus:outline-none focus:ring-2 ${
-                  errors.name
-                    ? "border-rose-400 focus:ring-rose-200"
-                    : "border-slate-200 focus:border-cyan-500 focus:ring-cyan-100"
-                }`}
-              />
-              {errors.name && (
-                <p id="name-error" className="mt-1 text-xs text-rose-600 font-medium">
-                  {errors.name}
-                </p>
-              )}
-            </div>
-
-            {/* Email Field */}
-            <div>
-              <label
-                htmlFor="contact-email"
-                className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5"
-              >
-                Email Address <span className="text-rose-500">*</span>
-              </label>
-              <input
-                id="contact-email"
-                name="email"
-                type="email"
-                value={formData.email}
-                onChange={handleChange}
-                placeholder="alex@company.com"
-                aria-invalid={!!errors.email}
-                aria-describedby={errors.email ? "email-error" : undefined}
-                className={`w-full px-4 py-2.5 text-sm rounded-xl border bg-slate-50/60 transition-colors focus:bg-white focus:outline-none focus:ring-2 ${
-                  errors.email
-                    ? "border-rose-400 focus:ring-rose-200"
-                    : "border-slate-200 focus:border-cyan-500 focus:ring-cyan-100"
-                }`}
-              />
-              {errors.email && (
-                <p id="email-error" className="mt-1 text-xs text-rose-600 font-medium">
-                  {errors.email}
-                </p>
-              )}
-            </div>
-
-            {/* Subject Field */}
-            <div>
-              <label
-                htmlFor="contact-subject"
-                className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5"
-              >
-                Subject <span className="text-rose-500">*</span>
-              </label>
-              <input
-                id="contact-subject"
-                name="subject"
-                type="text"
-                value={formData.subject}
-                onChange={handleChange}
-                placeholder="Custom Web Application Inquiry"
-                aria-invalid={!!errors.subject}
-                aria-describedby={errors.subject ? "subject-error" : undefined}
-                className={`w-full px-4 py-2.5 text-sm rounded-xl border bg-slate-50/60 transition-colors focus:bg-white focus:outline-none focus:ring-2 ${
-                  errors.subject
-                    ? "border-rose-400 focus:ring-rose-200"
-                    : "border-slate-200 focus:border-cyan-500 focus:ring-cyan-100"
-                }`}
-              />
-              {errors.subject && (
-                <p id="subject-error" className="mt-1 text-xs text-rose-600 font-medium">
-                  {errors.subject}
-                </p>
-              )}
-            </div>
-
-            {/* Message Field */}
-            <div>
-              <label
-                htmlFor="contact-message"
-                className="block text-xs font-bold text-slate-700 uppercase tracking-wider mb-1.5"
-              >
-                Message <span className="text-rose-500">*</span>
-              </label>
-              <textarea
-                id="contact-message"
-                name="message"
-                rows={4}
-                value={formData.message}
-                onChange={handleChange}
-                placeholder="Tell us about your project requirements, scope, or technical questions..."
-                aria-invalid={!!errors.message}
-                aria-describedby={errors.message ? "message-error" : undefined}
-                className={`w-full px-4 py-2.5 text-sm rounded-xl border bg-slate-50/60 transition-colors focus:bg-white focus:outline-none focus:ring-2 resize-y ${
-                  errors.message
-                    ? "border-rose-400 focus:ring-rose-200"
-                    : "border-slate-200 focus:border-cyan-500 focus:ring-cyan-100"
-                }`}
-              />
-              {errors.message && (
-                <p id="message-error" className="mt-1 text-xs text-rose-600 font-medium">
-                  {errors.message}
-                </p>
-              )}
-            </div>
-
-            {/* Submission Feedback Banner (Transparent, No False Claims) */}
-            {submissionFeedback.show && (
-              <div className="p-4 rounded-xl bg-blue-50 border border-blue-200 text-slate-700 space-y-2">
-                <div className="flex items-center gap-2 text-blue-900 font-bold text-xs uppercase tracking-wider">
-                  <span>✓ Form Validated</span>
-                </div>
-                <p className="text-xs text-slate-600 leading-relaxed">
-                  As noted above, a direct form backend is not connected. To send
-                  your validated message now, click the button below to dispatch it
-                  via your local email client directly to{" "}
-                  <strong>contact@adotshelor.com</strong>.
-                </p>
-                {submissionFeedback.mailtoUrl && (
-                  <div className="pt-1">
-                    <Button
-                      variant="primary"
-                      size="sm"
-                      href={submissionFeedback.mailtoUrl}
-                      isExternal
-                      icon={
-                        <svg
-                          className="w-3.5 h-3.5"
-                          fill="none"
-                          viewBox="0 0 24 24"
-                          stroke="currentColor"
-                          aria-hidden="true"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
-                          />
-                        </svg>
+            <form onSubmit={handleSubmit} className="mt-6 space-y-4">
+              {/* Service Interest Selector */}
+              <div>
+                <label
+                  htmlFor="serviceInterest"
+                  className="block text-xs font-bold uppercase tracking-wider text-[#00d2ee] mb-1.5"
+                >
+                  I am interested in:
+                </label>
+                <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                  {[
+                    { value: "problem", label: "01. Solve a Problem" },
+                    { value: "build", label: "02. Build an Idea" },
+                    { value: "understand", label: "03. Guided Project" },
+                  ].map((option) => (
+                    <button
+                      key={option.value}
+                      type="button"
+                      onClick={() =>
+                        setFormData((prev) => ({
+                          ...prev,
+                          serviceInterest: option.value as FormState["serviceInterest"],
+                        }))
                       }
+                      className={`px-3 py-2 rounded-xl text-xs font-semibold border text-left transition-all cursor-pointer ${
+                        formData.serviceInterest === option.value
+                          ? "bg-gradient-to-r from-[#0284c7] to-[#00d2ee] text-[#060d17] font-bold border-[#00d2ee] shadow-[0_4px_16px_rgba(0,210,238,0.35)]"
+                          : "bg-black/30 text-white/70 border-[var(--hair)] hover:bg-black/50 hover:border-[#00d2ee]/40"
+                      }`}
                     >
-                      Dispatch Email to contact@adotshelor.com
-                    </Button>
-                  </div>
-                )}
+                      {option.label}
+                    </button>
+                  ))}
+                </div>
               </div>
-            )}
 
-            <div className="pt-2">
-              <Button type="submit" variant="primary" size="md">
-                Validate & Prepare Message
-              </Button>
-            </div>
-          </form>
+              {/* Name & Email Fields */}
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                <div>
+                  <label
+                    htmlFor="contact-name"
+                    className="block text-xs font-bold uppercase tracking-wider text-white/80 mb-1.5"
+                  >
+                    Your Name <span className="text-[#00d2ee]">*</span>
+                  </label>
+                  <input
+                    id="contact-name"
+                    name="name"
+                    type="text"
+                    required
+                    value={formData.name}
+                    onChange={handleChange}
+                    placeholder="Alex Morgan"
+                    className="w-full px-4 py-2.5 text-sm rounded-xl border border-[var(--hair)] bg-black/40 text-white placeholder-white/40 focus:outline-none focus:border-[#00d2ee] focus:ring-2 focus:ring-[#00d2ee]/30 transition-colors"
+                  />
+                </div>
+
+                <div>
+                  <label
+                    htmlFor="contact-email"
+                    className="block text-xs font-bold uppercase tracking-wider text-white/80 mb-1.5"
+                  >
+                    Email Address <span className="text-[#00d2ee]">*</span>
+                  </label>
+                  <input
+                    id="contact-email"
+                    name="email"
+                    type="email"
+                    required
+                    value={formData.email}
+                    onChange={handleChange}
+                    placeholder="alex@company.com"
+                    className="w-full px-4 py-2.5 text-sm rounded-xl border border-[var(--hair)] bg-black/40 text-white placeholder-white/40 focus:outline-none focus:border-[#00d2ee] focus:ring-2 focus:ring-[#00d2ee]/30 transition-colors"
+                  />
+                </div>
+              </div>
+
+              {/* Subject Field */}
+              <div>
+                <label
+                  htmlFor="contact-subject"
+                  className="block text-xs font-bold uppercase tracking-wider text-white/80 mb-1.5"
+                >
+                  Subject <span className="text-[#00d2ee]">*</span>
+                </label>
+                <input
+                  id="contact-subject"
+                  name="subject"
+                  type="text"
+                  required
+                  value={formData.subject}
+                  onChange={handleChange}
+                  placeholder="Operational tool optimization / New platform idea"
+                  className="w-full px-4 py-2.5 text-sm rounded-xl border border-[var(--hair)] bg-black/40 text-white placeholder-white/40 focus:outline-none focus:border-[#00d2ee] focus:ring-2 focus:ring-[#00d2ee]/30 transition-colors"
+                />
+              </div>
+
+              {/* Message Field */}
+              <div>
+                <label
+                  htmlFor="contact-message"
+                  className="block text-xs font-bold uppercase tracking-wider text-white/80 mb-1.5"
+                >
+                  Message <span className="text-[#00d2ee]">*</span>
+                </label>
+                <textarea
+                  id="contact-message"
+                  name="message"
+                  rows={4}
+                  required
+                  value={formData.message}
+                  onChange={handleChange}
+                  placeholder="Describe your current challenge, idea, or questions..."
+                  className="w-full px-4 py-2.5 text-sm rounded-xl border border-[var(--hair)] bg-black/40 text-white placeholder-white/40 focus:outline-none focus:border-[#00d2ee] focus:ring-2 focus:ring-[#00d2ee]/30 transition-colors resize-y"
+                />
+              </div>
+
+              {/* Hidden Honeypot field for bot suppression */}
+              <div style={{ display: "none" }} aria-hidden="true">
+                <label htmlFor="hp_company">Company</label>
+                <input
+                  id="hp_company"
+                  name="hp_company"
+                  type="text"
+                  tabIndex={-1}
+                  autoComplete="off"
+                  value={formData.hp_company || ""}
+                  onChange={handleChange}
+                />
+              </div>
+
+              {/* Feedback Notifications */}
+              {status === "success" && (
+                <div className="p-4 rounded-xl bg-[rgba(0,210,238,0.15)] border border-[#00d2ee]/50 flex items-start gap-3">
+                  <CheckCircle2 className="w-5 h-5 text-[#00d2ee] shrink-0 mt-0.5" />
+                  <div className="text-xs text-white">
+                    <span className="font-bold block">Inquiry Transmitted Successfully</span>
+                    <span>{feedbackMessage}</span>
+                  </div>
+                </div>
+              )}
+
+              {status === "error" && (
+                <div className="p-4 rounded-xl bg-rose-950/60 border border-rose-500/50 flex items-start gap-3">
+                  <AlertCircle className="w-5 h-5 text-rose-400 shrink-0 mt-0.5" />
+                  <div className="text-xs text-rose-200">
+                    <span className="font-bold block">Transmission Notice</span>
+                    <span>{feedbackMessage}</span>
+                  </div>
+                </div>
+              )}
+
+              {/* Submit CTA Button */}
+              <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
+                <button
+                  type="submit"
+                  disabled={loading}
+                  className="btn btn--flame w-full sm:w-auto text-sm cursor-pointer disabled:opacity-50"
+                >
+                  <Send className="w-4 h-4" />
+                  <span>{loading ? "Transmitting..." : "Start a Conversation"}</span>
+                </button>
+
+                <a
+                  href={`mailto:contact@adotshelor.com?subject=${encodeURIComponent(
+                    `[Inquiry] ${formData.subject || "AdotShelor Studio"}`
+                  )}`}
+                  className="text-xs text-white/50 hover:text-[#00d2ee] transition-colors inline-flex items-center gap-1"
+                >
+                  <span>Or email directly via mail client</span>
+                  <ArrowUpRight className="w-3.5 h-3.5" />
+                </a>
+              </div>
+            </form>
+          </div>
         </div>
       </div>
     </section>

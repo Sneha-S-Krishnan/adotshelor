@@ -4,10 +4,10 @@ import React, { useState, useCallback } from "react";
 import { BrandIntro } from "@/components/brand/BrandIntro";
 import { Navbar } from "@/components/layout/Navbar";
 import { HeroSection } from "@/components/sections/HeroSection";
-import { AboutSection } from "@/components/sections/AboutSection";
 import { ServicesSection } from "@/components/sections/ServicesSection";
+import { ProcessSection } from "@/components/sections/ProcessSection";
 import { ProjectsSection } from "@/components/sections/ProjectsSection";
-import { TeamSection } from "@/components/sections/TeamSection";
+import { DifferenceSection } from "@/components/sections/DifferenceSection";
 import { ContactSection } from "@/components/sections/ContactSection";
 import { Footer } from "@/components/layout/Footer";
 
@@ -31,8 +31,8 @@ export default function Home() {
   }, []);
 
   return (
-    <div className="min-h-screen flex flex-col bg-[#f8fafc]">
-      {/* Brand Intro Animation (Phase 1-6) */}
+    <div className="min-h-screen flex flex-col bg-[#060D17] text-white">
+      {/* Brand Intro Animation */}
       <BrandIntro
         key={introKey}
         isSettled={isSettled}
@@ -42,27 +42,27 @@ export default function Home() {
       {/* Shared Responsive Sticky Navbar */}
       <Navbar isSettled={isSettled} />
 
-      <main className="flex-1">
-        {/* Section 1 (Top): Animated Hero Section */}
+      <main id="main" className="flex-1">
+        {/* 02. Hero Section — First Impression */}
         <HeroSection isSettled={isSettled} />
 
-        {/* Section 2: About AdotShelor */}
-        <AboutSection />
-
-        {/* Section 3: Our Services */}
+        {/* 03-06. Our Three Core Services */}
         <ServicesSection />
 
-        {/* Section 4: Our Projects */}
+        {/* 07. Our Approach — How We Work */}
+        <ProcessSection />
+
+        {/* 08. Projects Section — Real Projects. Real Solutions. */}
         <ProjectsSection />
 
-        {/* Section 5: Who Are We? / Our Team */}
-        <TeamSection />
+        {/* 09. Why Choose AdotShelor? — More Than Just Development. */}
+        <DifferenceSection />
 
-        {/* Section 6: Contact */}
+        {/* 10. Contact / Let's Build */}
         <ContactSection />
       </main>
 
-      {/* Shared Semantic Footer */}
+      {/* 11. Website Footer */}
       <Footer onReplayIntro={handleReplay} />
     </div>
   );

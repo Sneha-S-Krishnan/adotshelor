@@ -1,229 +1,182 @@
 "use client";
 
-import React, { useState, useId } from "react";
-import { SectionHeading } from "@/components/ui/SectionHeading";
+import React, { useRef } from "react";
+import Image from "next/image";
 import { PROJECTS_DATA } from "@/data/portfolioData";
-import { ProjectItem } from "@/types/portfolio";
-import { Button } from "@/components/ui/Button";
+import { ExternalLink, GitBranch, ChevronLeft, ChevronRight, CheckCircle2, Clock } from "lucide-react";
 
-function ProjectCard({ project }: { project: ProjectItem }) {
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
-  const detailsId = useId();
+export function ProjectsSection() {
+  const scrollRef = useRef<HTMLDivElement>(null);
+
+  const scroll = (direction: "left" | "right") => {
+    if (scrollRef.current) {
+      const offset = direction === "left" ? -440 : 440;
+      scrollRef.current.scrollBy({ left: offset, behavior: "smooth" });
+    }
+  };
 
   return (
-    <article className="group relative flex flex-col justify-between bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-7 shadow-xs hover:shadow-md transition-all duration-200 hover:border-cyan-300">
-      <div>
-        {/* Top Header: Status and Placeholder indicator */}
-        <div className="flex items-center justify-between gap-3 mb-4">
-          <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-50 text-emerald-700 border border-emerald-200/80">
-            <span className="w-1.5 h-1.5 rounded-full bg-emerald-500" />
-            <span>{project.status}</span>
+    <section
+      id="projects"
+      className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-[var(--hair-soft)] relative scroll-mt-12"
+    >
+      {/* Header and horizontal scroll controls */}
+      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-14">
+        <div className="max-w-2xl">
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[rgba(0,210,238,0.12)] text-[#00d2ee] border border-[rgba(0,210,238,0.28)] mb-3">
+            Projects and Portfolio
           </span>
-
-          {project.isPlaceholder ? (
-            <span
-              className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-200/80"
-              title="Verified development placeholder"
-            >
-              Placeholder
-            </span>
-          ) : (
-            <span
-              className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-cyan-50 text-cyan-800 border border-cyan-200/80"
-              title="Live Production Build"
-            >
-              Verified Project
-            </span>
-          )}
-        </div>
-
-        {/* Title */}
-        <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-snug">
-          {project.title}
-        </h3>
-
-        {/* Short Description */}
-        <p className="mt-2.5 text-sm text-slate-600 leading-relaxed">
-          {project.shortDescription}
-        </p>
-
-        {/* Problem Addressed */}
-        <div className="mt-4 p-3 rounded-xl bg-slate-50 border border-slate-200/70">
-          <span className="block text-[11px] font-bold uppercase tracking-wider text-slate-500 mb-1">
-            Problem Addressed:
-          </span>
-          <p className="text-xs text-slate-700 leading-relaxed">
-            {project.problemAddressed}
+          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
+            Real Projects. Real Solutions.
+          </h2>
+          <p className="mt-3 text-base sm:text-lg text-white/70 leading-relaxed">
+            Showcasing our strongest projects built with disciplined software engineering,
+            functional design, and maintainable architecture.
           </p>
         </div>
 
-        {/* Technology Tags */}
-        <div className="mt-4 flex flex-wrap gap-1.5">
-          {project.technologies.map((tech) => (
-            <span
-              key={tech}
-              className="inline-flex items-center px-2.5 py-0.5 rounded-md text-xs font-medium bg-slate-100 text-slate-700 border border-slate-200/60"
-            >
-              {tech}
-            </span>
-          ))}
+        {/* Scroll Buttons for horizontal track */}
+        <div className="hidden sm:flex items-center gap-2">
+          <button
+            type="button"
+            onClick={() => scroll("left")}
+            aria-label="Scroll projects left"
+            className="w-10 h-10 rounded-full border border-[var(--hair)] bg-[rgba(11,25,44,0.55)] text-white hover:bg-[rgba(0,210,238,0.2)] hover:border-[#00d2ee] flex items-center justify-center transition-colors cursor-pointer"
+          >
+            <ChevronLeft className="w-5 h-5" />
+          </button>
+          <button
+            type="button"
+            onClick={() => scroll("right")}
+            aria-label="Scroll projects right"
+            className="w-10 h-10 rounded-full border border-[var(--hair)] bg-[rgba(11,25,44,0.55)] text-white hover:bg-[rgba(0,210,238,0.2)] hover:border-[#00d2ee] flex items-center justify-center transition-colors cursor-pointer"
+          >
+            <ChevronRight className="w-5 h-5" />
+          </button>
         </div>
+      </div>
 
-        {/* Inline Expandable Details */}
-        {isExpanded && (
-          <div
-            id={detailsId}
-            className="mt-5 pt-4 pb-3 px-4 rounded-xl border border-cyan-100 bg-cyan-50/30 text-slate-700 space-y-3.5 transition-all duration-200"
+      {/* Grid / Horizontal Snap Scroll Track */}
+      <div
+        ref={scrollRef}
+        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 focus:outline-none"
+      >
+        {PROJECTS_DATA.map((project) => (
+          <article
+            key={project.id}
+            className="flex flex-col justify-between rounded-3xl bg-[rgba(11,25,44,0.6)] backdrop-blur-xl border border-[var(--hair)] overflow-hidden shadow-xl hover:border-[#00d2ee]/60 hover:shadow-[0_16px_40px_rgba(0,210,238,0.15)] transition-all duration-300"
           >
             <div>
-              <h4 className="font-semibold text-xs text-slate-900 uppercase tracking-wider mb-1">
-                Main Features:
-              </h4>
-              <ul className="space-y-1 text-xs text-slate-600">
-                {project.mainFeatures.map((feat, idx) => (
-                  <li key={idx} className="flex items-start gap-2">
-                    <span className="text-cyan-600 font-bold shrink-0">•</span>
-                    <span>{feat}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
+              {/* Project Screenshot / Visual Preview */}
+              {project.screenshot && (
+                <div className="relative aspect-[16/9] w-full bg-black/60 overflow-hidden border-b border-[var(--hair)] group">
+                  <Image
+                    src={project.screenshot}
+                    alt={`${project.name} screenshot`}
+                    fill
+                    className="object-cover group-hover:scale-105 transition-transform duration-500"
+                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-[rgba(6,13,23,0.85)] via-transparent to-transparent pointer-events-none" />
 
-            <div className="pt-2 border-t border-cyan-100/70">
-              <h4 className="font-semibold text-xs text-slate-900 uppercase tracking-wider mb-1">
-                Technical Details:
-              </h4>
-              <p className="text-xs text-slate-600 leading-relaxed">
-                {project.detailedInformation}
-              </p>
-            </div>
+                  {/* Category Pill Tag */}
+                  <div className="absolute top-3 left-3">
+                    <span className="px-2.5 py-1 rounded-md text-[11px] font-mono font-bold bg-[rgba(6,13,23,0.8)] backdrop-blur-md text-[#00d2ee] border border-[var(--hair)]">
+                      {project.category}
+                    </span>
+                  </div>
 
-            {/* External Links */}
-            {(project.externalUrl || project.repoUrl) && (
-              <div className="pt-3 border-t border-cyan-100/70 flex flex-wrap gap-2.5">
-                {project.externalUrl && (
-                  <Button
-                    variant="primary"
-                    size="sm"
-                    href={project.externalUrl}
-                    isExternal
-                    icon={
-                      <svg
-                        className="w-3.5 h-3.5"
-                        fill="none"
-                        viewBox="0 0 24 24"
-                        stroke="currentColor"
-                        aria-hidden="true"
+                  {/* Project Status Badge */}
+                  <div className="absolute top-3 right-3">
+                    {project.status === "Active" ? (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-[rgba(0,210,238,0.2)] backdrop-blur-md text-[#38bdf8] border border-[#00d2ee]/40">
+                        <CheckCircle2 className="w-3 h-3 text-[#00d2ee]" />
+                        Active
+                      </span>
+                    ) : (
+                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-[rgba(245,158,11,0.2)] backdrop-blur-md text-[#f59e0b] border border-[#f59e0b]/40">
+                        <Clock className="w-3 h-3 text-[#f59e0b]" />
+                        {project.status}
+                      </span>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Card Body */}
+              <div className="p-6">
+                <h3 className="text-xl font-bold text-white tracking-tight">
+                  {project.name}
+                </h3>
+
+                {/* Problem Addressed */}
+                <div className="mt-4 p-3.5 rounded-xl bg-black/35 border border-[var(--hair)] text-xs">
+                  <span className="font-bold text-[#00d2ee] block mb-1">
+                    Problem Addressed:
+                  </span>
+                  <p className="text-white/75 leading-relaxed">
+                    {project.problem}
+                  </p>
+                </div>
+
+                {/* Solution Developed */}
+                <div className="mt-3 p-3.5 rounded-xl bg-[rgba(14,35,62,0.45)] border border-[var(--hair)] text-xs">
+                  <span className="font-bold text-white block mb-1">
+                    Solution Developed:
+                  </span>
+                  <p className="text-white/80 leading-relaxed">
+                    {project.solution}
+                  </p>
+                </div>
+
+                {/* Technologies Used */}
+                <div className="mt-4">
+                  <span className="block text-[10px] font-bold uppercase tracking-wider text-white/50 mb-1.5">
+                    Technologies Used:
+                  </span>
+                  <div className="flex flex-wrap gap-1.5">
+                    {project.technologies.map((tech) => (
+                      <span
+                        key={tech}
+                        className="px-2 py-0.5 rounded text-[11px] font-medium bg-[rgba(255,255,255,0.06)] text-white/80 border border-[var(--hair)]"
                       >
-                        <path
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                          strokeWidth={2}
-                          d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-                        />
-                      </svg>
-                    }
-                    iconPosition="right"
-                  >
-                    Open Live Project
-                  </Button>
-                )}
-                {project.repoUrl && (
-                  <Button
-                    variant="secondary"
-                    size="sm"
-                    href={project.repoUrl}
-                    isExternal
-                  >
-                    Source Code
-                  </Button>
-                )}
+                        {tech}
+                      </span>
+                    ))}
+                  </div>
+                </div>
               </div>
-            )}
-          </div>
-        )}
-      </div>
+            </div>
 
-      {/* Card Action Footer */}
-      <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between gap-3">
-        <button
-          type="button"
-          onClick={() => setIsExpanded((prev) => !prev)}
-          aria-expanded={isExpanded}
-          aria-controls={detailsId}
-          className="inline-flex items-center gap-1.5 text-xs font-semibold py-1.5 px-3 rounded-lg text-cyan-700 hover:text-cyan-800 hover:bg-cyan-50 transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500"
-        >
-          <span>{isExpanded ? "Collapse Details" : "View Architecture & Features"}</span>
-          <svg
-            className={`w-3.5 h-3.5 transition-transform duration-200 ${
-              isExpanded ? "rotate-180" : ""
-            }`}
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
+            {/* Footer Action Links: Live Demo & GitHub */}
+            <div className="p-6 pt-0 mt-2 border-t border-[var(--hair)] flex items-center justify-between gap-3">
+              {project.liveDemo ? (
+                <a
+                  href={project.liveDemo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#00d2ee] hover:underline"
+                >
+                  <span>Live Demo</span>
+                  <ExternalLink className="w-3.5 h-3.5" />
+                </a>
+              ) : (
+                <span className="text-xs text-white/40 italic">Demo on request</span>
+              )}
 
-        {!isExpanded && project.externalUrl && (
-          <a
-            href={project.externalUrl}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="text-xs font-medium text-slate-500 hover:text-cyan-700 transition-colors inline-flex items-center gap-1"
-          >
-            <span>Live Site</span>
-            <svg
-              className="w-3 h-3"
-              fill="none"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-              aria-hidden="true"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth={2}
-                d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"
-              />
-            </svg>
-          </a>
-        )}
-      </div>
-    </article>
-  );
-}
-
-export function ProjectsSection() {
-  return (
-    <section
-      id="our-projects"
-      className="py-20 sm:py-28 border-t border-slate-200/70 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
-    >
-      <SectionHeading
-        badge="Our Projects"
-        badgeAccent="mint"
-        title={
-          <>
-            Project Portfolio &{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-emerald-600 to-cyan-600">
-              Technical Showcase
-            </span>
-          </>
-        }
-        subtitle="Active and planned software developments with problem definitions, features, and inline architecture disclosures."
-      />
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-start">
-        {PROJECTS_DATA.map((project) => (
-          <ProjectCard key={project.id} project={project} />
+              {project.githubRepo ? (
+                <a
+                  href={project.githubRepo}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-white/70 hover:text-white transition-colors"
+                >
+                  <GitBranch className="w-3.5 h-3.5" />
+                  <span>GitHub Repository</span>
+                </a>
+              ) : null}
+            </div>
+          </article>
         ))}
       </div>
     </section>

@@ -1,198 +1,307 @@
 "use client";
 
-import React, { useState, useId } from "react";
-import { SectionHeading } from "@/components/ui/SectionHeading";
-import { SERVICES_DATA } from "@/data/portfolioData";
-import { ServiceItem, AccentColor } from "@/types/portfolio";
-
-const accentStyles: Record<
-  AccentColor,
-  {
-    border: string;
-    badge: string;
-    iconBg: string;
-    panelBg: string;
-    button: string;
-  }
-> = {
-  cyan: {
-    border: "hover:border-cyan-300 focus-within:border-cyan-400",
-    badge: "bg-cyan-50 text-cyan-800 border-cyan-200/80",
-    iconBg: "bg-cyan-50 text-cyan-700 border-cyan-100",
-    panelBg: "bg-cyan-50/40 border-cyan-100/90",
-    button: "text-cyan-700 hover:text-cyan-800 hover:bg-cyan-50",
-  },
-  purple: {
-    border: "hover:border-purple-300 focus-within:border-purple-400",
-    badge: "bg-purple-50 text-purple-800 border-purple-200/80",
-    iconBg: "bg-purple-50 text-purple-700 border-purple-100",
-    panelBg: "bg-purple-50/40 border-purple-100/90",
-    button: "text-purple-700 hover:text-purple-800 hover:bg-purple-50",
-  },
-  mint: {
-    border: "hover:border-emerald-300 focus-within:border-emerald-400",
-    badge: "bg-emerald-50 text-emerald-800 border-emerald-200/80",
-    iconBg: "bg-emerald-50 text-emerald-700 border-emerald-100",
-    panelBg: "bg-emerald-50/40 border-emerald-100/90",
-    button: "text-emerald-700 hover:text-emerald-800 hover:bg-emerald-50",
-  },
-  pink: {
-    border: "hover:border-pink-300 focus-within:border-pink-400",
-    badge: "bg-pink-50 text-pink-800 border-pink-200/80",
-    iconBg: "bg-pink-50 text-pink-700 border-pink-100",
-    panelBg: "bg-pink-50/40 border-pink-100/90",
-    button: "text-pink-700 hover:text-pink-800 hover:bg-pink-50",
-  },
-  blue: {
-    border: "hover:border-blue-300 focus-within:border-blue-400",
-    badge: "bg-blue-50 text-blue-800 border-blue-200/80",
-    iconBg: "bg-blue-50 text-blue-700 border-blue-100",
-    panelBg: "bg-blue-50/40 border-blue-100/90",
-    button: "text-blue-700 hover:text-blue-800 hover:bg-blue-50",
-  },
-};
-
-function ServiceCard({ service }: { service: ServiceItem }) {
-  const [isExpanded, setIsExpanded] = useState<boolean>(false);
-  const panelId = useId();
-  const styles = accentStyles[service.accentColor];
-
-  return (
-    <article
-      className={`group relative flex flex-col justify-between bg-white rounded-2xl border border-slate-200/80 p-6 sm:p-7 shadow-xs hover:shadow-md transition-all duration-200 ${styles.border}`}
-    >
-      <div>
-        {/* Category & Status Header */}
-        <div className="flex items-center justify-between gap-3 mb-4">
-          <span className="text-xs font-bold uppercase tracking-wider text-slate-500">
-            {service.category}
-          </span>
-          {service.isProposed && (
-            <span
-              className="inline-flex items-center px-2 py-0.5 rounded text-[11px] font-medium bg-amber-50 text-amber-700 border border-amber-200/80"
-              title="Proposed service category under business review"
-            >
-              Proposed Offering
-            </span>
-          )}
-        </div>
-
-        {/* Title */}
-        <h3 className="text-lg sm:text-xl font-bold text-slate-900 tracking-tight leading-snug">
-          {service.title}
-        </h3>
-
-        {/* Short Summary */}
-        <p className="mt-2.5 text-sm text-slate-600 leading-relaxed">
-          {service.shortDescription}
-        </p>
-
-        {/* Technologies Pills */}
-        <div className="mt-4 flex flex-wrap gap-1.5">
-          {service.technologies.map((tech) => (
-            <span
-              key={tech}
-              className="inline-flex items-center px-2 py-0.5 rounded-md text-xs font-medium bg-slate-100/80 text-slate-700 border border-slate-200/60"
-            >
-              {tech}
-            </span>
-          ))}
-        </div>
-
-        {/* Inline Expandable Details Panel */}
-        {isExpanded && (
-          <div
-            id={panelId}
-            className={`mt-5 pt-4 pb-3 px-4 rounded-xl border text-sm text-slate-700 transition-all duration-200 ${styles.panelBg}`}
-          >
-            {/* Approach */}
-            <div className="mb-3">
-              <h4 className="font-semibold text-xs text-slate-900 uppercase tracking-wider mb-1">
-                Engineering Approach:
-              </h4>
-              <p className="text-xs sm:text-sm text-slate-600 leading-relaxed">
-                {service.approach}
-              </p>
-            </div>
-
-            {/* Deliverables List */}
-            <div>
-              <h4 className="font-semibold text-xs text-slate-900 uppercase tracking-wider mb-1.5">
-                Key Deliverables:
-              </h4>
-              <ul className="space-y-1 text-xs text-slate-600">
-                {service.deliverables.map((item, idx) => (
-                  <li key={idx} className="flex items-start gap-2">
-                    <span className="text-cyan-600 font-bold shrink-0">•</span>
-                    <span>{item}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-        )}
-      </div>
-
-      {/* Accessible Inline Toggle Button */}
-      <div className="mt-6 pt-4 border-t border-slate-100 flex items-center justify-between">
-        <button
-          type="button"
-          onClick={() => setIsExpanded((prev) => !prev)}
-          aria-expanded={isExpanded}
-          aria-controls={panelId}
-          className={`inline-flex items-center gap-1.5 text-xs font-semibold py-1.5 px-3 rounded-lg transition-colors cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-cyan-500 ${styles.button}`}
-        >
-          <span>{isExpanded ? "Collapse Details" : "View Details & Scope"}</span>
-          <svg
-            className={`w-3.5 h-3.5 transition-transform duration-200 ${
-              isExpanded ? "rotate-180" : ""
-            }`}
-            fill="none"
-            viewBox="0 0 24 24"
-            stroke="currentColor"
-            aria-hidden="true"
-          >
-            <path
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth={2}
-              d="M19 9l-7 7-7-7"
-            />
-          </svg>
-        </button>
-
-        <span className="text-[11px] text-slate-400">
-          {isExpanded ? "Details active" : "Expandable inline"}
-        </span>
-      </div>
-    </article>
-  );
-}
+import React, { useState } from "react";
+import { motion, AnimatePresence, useReducedMotion } from "motion/react";
+import { SERVICE_PILLARS } from "@/data/portfolioData";
+import {
+  ChevronDown,
+  CheckCircle2,
+  Wrench,
+  Sparkles,
+  BookOpen,
+  ArrowRight,
+  Server,
+  Shield,
+  Database,
+  Layout,
+} from "lucide-react";
 
 export function ServicesSection() {
+  const [expandedId, setExpandedId] = useState<string>("problem-solving");
+  const prefersReduced = useReducedMotion();
+
+  // For Service 03 (Understand): Interactive architecture nodes
+  const [activeNode, setActiveNode] = useState<string>("api");
+
+  const architectureNodes: Record<
+    string,
+    { label: string; icon: React.ReactNode; explanation: string }
+  > = {
+    frontend: {
+      label: "Frontend Interface",
+      icon: <Layout className="w-4 h-4 text-[#00d2ee]" />,
+      explanation:
+        "The interface you and your users touch. Built with responsive Next.js & React for instant loading, full accessibility, and smooth interactivity.",
+    },
+    api: {
+      label: "API & Backend Logic",
+      icon: <Server className="w-4 h-4 text-[#00d2ee]" />,
+      explanation:
+        "The central nervous system. Clean TypeScript endpoints that validate inputs, execute business rules, and communicate safely with your database.",
+    },
+    database: {
+      label: "Database & Storage",
+      icon: <Database className="w-4 h-4 text-[#00d2ee]" />,
+      explanation:
+        "Where your records live permanently. Structured with type safety and indexed queries so performance stays fast as data scales.",
+    },
+    auth: {
+      label: "Security & Permissions",
+      icon: <Shield className="w-4 h-4 text-[#00d2ee]" />,
+      explanation:
+        "Protected system boundaries. Strict session cookies and role-based checks ensuring only authorized users can access sensitive features.",
+    },
+  };
+
   return (
     <section
-      id="our-services"
-      className="py-20 sm:py-28 border-t border-slate-200/70 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8"
+      id="services"
+      className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-[var(--hair-soft)] relative"
     >
-      <SectionHeading
-        badge="Our Services"
-        badgeAccent="cyan"
-        title={
-          <>
-            Technical Capabilities &{" "}
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-cyan-600 to-teal-600">
-              Service Solutions
-            </span>
-          </>
-        }
-        subtitle="Proposed service offerings engineered with strict type safety, responsive interfaces, and modern standards. Expand any category for detailed scope."
+      {/* Background ambient cyan glow */}
+      <div
+        className="absolute top-1/2 right-0 w-[500px] h-[350px] bg-[#00d2ee]/8 rounded-full blur-[140px] pointer-events-none"
+        aria-hidden="true"
       />
 
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 lg:gap-8 items-start">
-        {SERVICES_DATA.map((service) => (
-          <ServiceCard key={service.id} service={service} />
-        ))}
+      {/* Section Header */}
+      <div className="max-w-3xl mb-12 sm:mb-16">
+        <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[rgba(0,210,238,0.12)] text-[#00d2ee] border border-[rgba(0,210,238,0.28)] mb-3">
+          Our Three Core Services
+        </span>
+        <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
+          Three Focused Ways We Solve, Build, and Guide.
+        </h2>
+        <p className="mt-4 text-base sm:text-lg text-white/70 leading-relaxed">
+          This is what AdotShelor offers: thoughtful digital solutions that solve real problems,
+          turn concepts into working applications, and ensure you understand the technology behind them.
+        </p>
+      </div>
+
+      {/* Core Services Cards / Accordion */}
+      <div className="space-y-5">
+        {SERVICE_PILLARS.map((service) => {
+          const isExpanded = expandedId === service.id;
+
+          return (
+            <motion.article
+              key={service.id}
+              layout={!prefersReduced}
+              className={`rounded-3xl border transition-all duration-300 overflow-hidden backdrop-blur-xl ${
+                isExpanded
+                  ? "bg-[rgba(14,35,62,0.7)] border-[#00d2ee]/60 shadow-[0_12px_36px_rgba(0,210,238,0.15)]"
+                  : "bg-[rgba(11,25,44,0.45)] hover:bg-[rgba(11,25,44,0.65)] border-[var(--hair)]"
+              }`}
+            >
+              {/* Accordion Trigger */}
+              <button
+                type="button"
+                onClick={() => setExpandedId(isExpanded ? "" : service.id)}
+                aria-expanded={isExpanded}
+                aria-controls={`service-panel-${service.id}`}
+                className="w-full text-left p-6 sm:p-8 flex items-center justify-between gap-4 cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00d2ee]"
+              >
+                <div className="flex flex-col sm:flex-row sm:items-baseline gap-2 sm:gap-6">
+                  <span className="text-sm sm:text-base font-mono font-bold text-[#00d2ee]">
+                    {service.number} / {service.tag}
+                  </span>
+                  <div>
+                    <h3 className="text-xl sm:text-2xl font-bold text-white tracking-tight">
+                      {service.heading}
+                    </h3>
+                    <p className="text-xs sm:text-sm font-medium text-white/60 mt-0.5">
+                      {service.title}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                  <span className="hidden sm:inline-block text-xs font-semibold text-[#00d2ee]">
+                    {isExpanded ? "Collapse Details" : "View Details"}
+                  </span>
+                  <div
+                    className={`w-9 h-9 rounded-full border flex items-center justify-center text-white transition-transform duration-200 ${
+                      isExpanded
+                        ? "rotate-180 bg-[#0284c7] border-[#00d2ee]"
+                        : "bg-[rgba(255,255,255,0.06)] border-[var(--hair)]"
+                    }`}
+                  >
+                    <ChevronDown className="w-4 h-4" />
+                  </div>
+                </div>
+              </button>
+
+              {/* Expanded Content */}
+              <AnimatePresence initial={false}>
+                {isExpanded && (
+                  <motion.div
+                    id={`service-panel-${service.id}`}
+                    key="content"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: "auto" }}
+                    exit={{ opacity: 0, height: 0 }}
+                    transition={{
+                      duration: prefersReduced ? 0 : 0.35,
+                      ease: [0.16, 1, 0.3, 1],
+                    }}
+                    className="border-t border-[var(--hair)]"
+                  >
+                    <div className="p-6 sm:p-8 grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+                      {/* Left: Narrative, What We Offer & Direct CTA */}
+                      <div className="lg:col-span-7 space-y-6">
+                        <div>
+                          <p className="text-base sm:text-lg font-medium text-white/90 leading-relaxed">
+                            {service.description}
+                          </p>
+                        </div>
+
+                        <div>
+                          <h4 className="text-xs font-bold uppercase tracking-wider text-[#00d2ee] mb-3">
+                            What We Offer:
+                          </h4>
+                          <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                            {service.whatWeOffer.map((item, idx) => (
+                              <li
+                                key={idx}
+                                className="flex items-start gap-2.5 text-xs sm:text-sm text-white/90 bg-black/20 p-2.5 rounded-xl border border-[var(--hair)]"
+                              >
+                                <CheckCircle2 className="w-4 h-4 text-[#00d2ee] shrink-0 mt-0.5" />
+                                <span>{item}</span>
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+
+                        {/* Direct Button */}
+                        <div className="pt-2">
+                          <a
+                            href={service.buttonHref}
+                            className="btn btn--cyan inline-flex items-center gap-2 text-sm font-semibold px-5 py-2.5 rounded-xl shadow-[0_0_20px_rgba(0,210,238,0.25)] hover:shadow-[0_0_25px_rgba(0,210,238,0.4)] transition-all"
+                          >
+                            <span>{service.buttonText}</span>
+                            <ArrowRight className="w-4 h-4" />
+                          </a>
+                        </div>
+                      </div>
+
+                      {/* Right: Interactive Visual Illustration */}
+                      <div className="lg:col-span-5 bg-[rgba(6,13,23,0.75)] rounded-2xl border border-[var(--hair)] p-5 sm:p-6 flex flex-col justify-between">
+                        {/* Service 01: Problem Solving Visual */}
+                        {service.id === "problem-solving" && (
+                          <div>
+                            <div className="flex items-center gap-2 mb-3 text-xs font-mono text-[#00d2ee]">
+                              <Wrench className="w-3.5 h-3.5" />
+                              <span>Workflow Optimization Engine</span>
+                            </div>
+                            <div className="aspect-[4/3] rounded-xl bg-black/40 border border-[var(--hair)] p-4 flex flex-col justify-center items-center gap-3">
+                              <div className="w-full bg-[rgba(14,35,62,0.6)] p-3 rounded-lg border border-[var(--hair)] text-xs">
+                                <span className="text-white/40 block text-[10px] uppercase font-mono">Manual Bottleneck</span>
+                                <span className="text-white/80 font-mono">4-Hour Daily Spreadsheets → Fragmented Errors</span>
+                              </div>
+                              <div className="w-6 h-6 rounded-full bg-[#00d2ee]/20 text-[#00d2ee] flex items-center justify-center text-xs font-bold">
+                                ↓
+                              </div>
+                              <div className="w-full bg-[rgba(0,210,238,0.12)] p-3 rounded-lg border border-[#00d2ee]/40 text-xs">
+                                <span className="text-[#00d2ee] block text-[10px] uppercase font-mono font-bold">Automated System</span>
+                                <span className="text-white font-semibold">Real-time sync • 0 manual errors • Instant dispatch</span>
+                              </div>
+                            </div>
+                            <p className="mt-3 text-xs text-white/60 text-center">
+                              Targeted tools that eliminate operational friction and save hours every week.
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Service 02: Idea to Product Visual */}
+                        {service.id === "idea-to-product" && (
+                          <div>
+                            <div className="flex items-center gap-2 mb-3 text-xs font-mono text-[#00d2ee]">
+                              <Sparkles className="w-3.5 h-3.5" />
+                              <span>Architecture &amp; MVP Blueprint</span>
+                            </div>
+                            <div className="aspect-[4/3] rounded-xl bg-black/40 border border-[var(--hair)] p-4 flex flex-col justify-between">
+                              <div className="flex items-center justify-between text-xs font-mono pb-2 border-b border-[var(--hair)]">
+                                <span className="text-white/70">Concept Definition</span>
+                                <span className="text-[#00d2ee]">Ready</span>
+                              </div>
+                              <div className="grid grid-cols-2 gap-2 my-2">
+                                <div className="p-2 rounded bg-white/5 border border-[var(--hair)]">
+                                  <span className="text-[10px] text-white/50 block">UX Prototype</span>
+                                  <span className="text-xs text-white font-medium">Interactive Wireframe</span>
+                                </div>
+                                <div className="p-2 rounded bg-white/5 border border-[var(--hair)]">
+                                  <span className="text-[10px] text-white/50 block">Backend APIs</span>
+                                  <span className="text-xs text-white font-medium">Type-Safe Endpoints</span>
+                                </div>
+                              </div>
+                              <div className="h-7 w-full rounded-lg bg-gradient-to-r from-[#0284c7] to-[#00d2ee] text-[#060d17] flex items-center justify-center text-xs font-bold">
+                                Production Application Launched
+                              </div>
+                            </div>
+                            <p className="mt-3 text-xs text-white/60 text-center">
+                              From initial napkin sketches to a tested, deployable software product.
+                            </p>
+                          </div>
+                        )}
+
+                        {/* Service 03: Guided Development Interactive Visual */}
+                        {service.id === "guided-development" && (
+                          <div>
+                            <div className="flex items-center gap-2 mb-3 text-xs font-mono text-[#00d2ee]">
+                              <BookOpen className="w-3.5 h-3.5" />
+                              <span>System Architecture Walkthrough (Click any component)</span>
+                            </div>
+
+                            {/* Node selector tabs */}
+                            <div className="grid grid-cols-2 gap-2 mb-3">
+                              {Object.entries(architectureNodes).map(([key, node]) => {
+                                const isSelected = activeNode === key;
+                                return (
+                                  <button
+                                    key={key}
+                                    type="button"
+                                    onClick={() => setActiveNode(key)}
+                                    className={`p-2.5 rounded-xl border text-left flex items-center gap-2 transition-all cursor-pointer ${
+                                      isSelected
+                                        ? "bg-[rgba(0,210,238,0.2)] border-[#00d2ee] shadow-sm"
+                                        : "bg-black/30 border-[var(--hair)] hover:bg-black/50"
+                                    }`}
+                                  >
+                                    {node.icon}
+                                    <span
+                                      className={`text-xs font-bold ${
+                                        isSelected ? "text-[#00d2ee]" : "text-white/80"
+                                      }`}
+                                    >
+                                      {node.label}
+                                    </span>
+                                  </button>
+                                );
+                              })}
+                            </div>
+
+                            {/* Plain language explanation */}
+                            <div
+                              className="p-3.5 rounded-xl bg-black/50 border border-[#00d2ee]/40 min-h-[85px]"
+                              aria-live="polite"
+                            >
+                              <div className="text-[11px] font-bold uppercase tracking-wider text-[#00d2ee] mb-1">
+                                {architectureNodes[activeNode]?.label} Explained:
+                              </div>
+                              <p className="text-xs text-white/80 leading-relaxed">
+                                {architectureNodes[activeNode]?.explanation}
+                              </p>
+                            </div>
+                          </div>
+                        )}
+                      </div>
+                    </div>
+                  </motion.div>
+                )}
+              </AnimatePresence>
+            </motion.article>
+          );
+        })}
       </div>
     </section>
   );

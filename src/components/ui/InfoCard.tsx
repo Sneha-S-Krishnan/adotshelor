@@ -15,19 +15,17 @@ export interface InfoCardProps {
 }
 
 const accentBorderMap: Record<AccentColor, string> = {
-  cyan: "hover:border-cyan-300 focus-within:border-cyan-400",
-  purple: "hover:border-purple-300 focus-within:border-purple-400",
-  pink: "hover:border-pink-300 focus-within:border-pink-400",
-  mint: "hover:border-emerald-300 focus-within:border-emerald-400",
-  blue: "hover:border-blue-300 focus-within:border-blue-400",
+  teal: "hover:border-[#147D78]/60 focus-within:border-[#147D78]",
+  amber: "hover:border-[#D6A45D]/60 focus-within:border-[#D6A45D]",
+  navy: "hover:border-[#14263D]/60 focus-within:border-[#14263D]",
+  slate: "hover:border-[#647184]/60 focus-within:border-[#647184]",
 };
 
 const iconBgMap: Record<AccentColor, string> = {
-  cyan: "bg-cyan-50 text-cyan-700 border-cyan-100",
-  purple: "bg-purple-50 text-purple-700 border-purple-100",
-  pink: "bg-pink-50 text-pink-700 border-pink-100",
-  mint: "bg-emerald-50 text-emerald-700 border-emerald-100",
-  blue: "bg-blue-50 text-blue-700 border-blue-100",
+  teal: "bg-[#E7F3F2] text-[#147D78] border-[#147D78]/25",
+  amber: "bg-[#FBF4EB] text-[#A8742A] border-[#D6A45D]/30",
+  navy: "bg-[#F7F5F0] text-[#14263D] border-[#14263D]/20",
+  slate: "bg-[#FAF8F5] text-[#647184] border-[#E2DDD5]",
 };
 
 export function InfoCard({
@@ -35,7 +33,7 @@ export function InfoCard({
   subtitle,
   category,
   isPlaceholder = false,
-  accentColor = "cyan",
+  accentColor = "teal",
   icon,
   tags,
   children,

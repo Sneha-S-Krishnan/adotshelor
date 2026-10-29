@@ -12,16 +12,15 @@ export interface SectionHeadingProps {
 }
 
 const badgeColorMap: Record<AccentColor, string> = {
-  cyan: "bg-cyan-50 text-cyan-800 border-cyan-200/80",
-  purple: "bg-purple-50 text-purple-800 border-purple-200/80",
-  pink: "bg-pink-50 text-pink-800 border-pink-200/80",
-  mint: "bg-emerald-50 text-emerald-800 border-emerald-200/80",
-  blue: "bg-blue-50 text-blue-800 border-blue-200/80",
+  teal: "bg-[#E7F3F2] text-[#147D78] border-[#147D78]/25",
+  amber: "bg-[#FBF4EB] text-[#A8742A] border-[#D6A45D]/35",
+  navy: "bg-[#E2DDD5]/40 text-[#14263D] border-[#14263D]/20",
+  slate: "bg-[#F7F5F0] text-[#647184] border-[#E2DDD5]",
 };
 
 export function SectionHeading({
   badge,
-  badgeAccent = "cyan",
+  badgeAccent = "teal",
   title,
   subtitle,
   align = "center",

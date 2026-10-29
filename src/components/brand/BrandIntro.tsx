@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState, useEffect, useRef } from "react";
+import { NavyLogo } from "./Icons";
 
 export interface BrandIntroProps {
   readonly onComplete?: () => void;
@@ -48,7 +49,7 @@ export function BrandIntro({ onComplete, isSettled }: BrandIntroProps) {
       return () => clearTimeout(skipTimer);
     }
 
-    // Step 1: Start on clean light screen, begin typing after short pause
+    // Step 1: Start on clean navy screen, begin typing after short pause
     const startTimer = setTimeout(() => {
       setPhase("typing");
     }, 280);
@@ -148,18 +149,18 @@ export function BrandIntro({ onComplete, isSettled }: BrandIntroProps) {
       className="fixed inset-0 z-50 flex items-center justify-center pointer-events-none transition-opacity duration-600 ease-out"
       style={{
         opacity: overlayOpacity,
-        backgroundColor: phase === "flying" ? "transparent" : "#f8fafc",
+        backgroundColor: phase === "flying" ? "transparent" : "#060D17",
       }}
       aria-hidden="false"
     >
-      {/* Ambient background glow during intro */}
+      {/* Ambient cyan/navy glow during intro */}
       {phase !== "flying" && (
         <div
           className="absolute inset-0 flex items-center justify-center pointer-events-none"
           aria-hidden="true"
         >
-          <div className="w-[500px] h-[300px] glow-ambient-cyan blur-3xl opacity-80" />
-          <div className="w-[400px] h-[250px] glow-ambient-purple blur-3xl opacity-60 -translate-x-12 translate-y-8" />
+          <div className="w-[500px] h-[300px] bg-[#00D2EE]/10 rounded-full blur-3xl" />
+          <div className="w-[350px] h-[220px] bg-[#0284C7]/15 rounded-full blur-3xl -translate-x-10 translate-y-6" />
         </div>
       )}
 
@@ -167,32 +168,35 @@ export function BrandIntro({ onComplete, isSettled }: BrandIntroProps) {
       <div
         ref={wordmarkRef}
         style={flightStyle}
-        className="relative z-10 flex items-baseline select-none text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight"
+        className="relative z-10 flex items-center gap-3 select-none text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight"
       >
-        {/* "AdotShelor" characters */}
-        <span className="text-slate-900 tracking-tight font-extrabold">
-          {typedText}
-        </span>
+        <NavyLogo className="w-10 h-10 sm:w-12 sm:h-12 md:w-16 md:h-16 shrink-0" />
+        <div className="flex items-baseline">
+          {/* "AdotShelor" characters */}
+          <span className="text-white tracking-tight font-extrabold">
+            {typedText}
+          </span>
 
-        {/* Sliding ".com" */}
-        <span
-          className="overflow-hidden inline-flex items-baseline transition-all duration-500 ease-out font-bold text-cyan-600 text-2xl sm:text-3xl md:text-4xl lg:text-5xl ml-1"
-          style={{
-            maxWidth: showDotCom ? "220px" : "0px",
-            opacity: showDotCom ? 1 : 0,
-            transform: showDotCom ? "translateX(0)" : "translateX(-12px)",
-          }}
-        >
-          .com
-        </span>
-
-        {/* Blinking Typing Cursor */}
-        {phase === "typing" && (
+          {/* Sliding ".com" in electric cyan */}
           <span
-            className="inline-block w-[3px] h-[0.9em] bg-cyan-500 ml-1 translate-y-[0.1em] animate-pulse"
-            aria-hidden="true"
-          />
-        )}
+            className="overflow-hidden inline-flex items-baseline transition-all duration-500 ease-out font-bold text-[#00D2EE] text-2xl sm:text-3xl md:text-4xl lg:text-5xl ml-1"
+            style={{
+              maxWidth: showDotCom ? "220px" : "0px",
+              opacity: showDotCom ? 1 : 0,
+              transform: showDotCom ? "translateX(0)" : "translateX(-12px)",
+            }}
+          >
+            .com
+          </span>
+
+          {/* Blinking Cyan Typing Cursor */}
+          {phase === "typing" && (
+            <span
+              className="inline-block w-[3px] h-[0.9em] bg-[#00D2EE] ml-1 translate-y-[0.1em] animate-pulse"
+              aria-hidden="true"
+            />
+          )}
+        </div>
       </div>
     </div>
   );

@@ -1,53 +1,57 @@
-export type AccentColor = "cyan" | "purple" | "pink" | "mint" | "blue";
+export type AccentColor = "teal" | "amber" | "navy" | "slate";
 
 export interface NavItem {
   readonly label: string;
   readonly href: string;
 }
 
-export interface ServiceItem {
+export interface ServicePillar {
   readonly id: string;
+  readonly number: string;
   readonly title: string;
-  readonly category: string;
-  readonly shortDescription: string;
-  readonly accentColor: AccentColor;
-  readonly deliverables: readonly string[];
-  readonly technologies: readonly string[];
-  readonly approach: string;
-  readonly isProposed?: boolean;
+  readonly heading: string;
+  readonly subtitle: string;
+  readonly tag: string;
+  readonly description: string;
+  readonly whatWeOffer: readonly string[];
+  readonly buttonText: string;
+  readonly buttonHref: string;
+  readonly technicalFocus: readonly string[];
+}
+
+export interface WorkStage {
+  readonly step: string;
+  readonly title: string;
+  readonly description: string;
+  readonly timeline: string;
 }
 
 export interface ProjectItem {
   readonly id: string;
-  readonly title: string;
-  readonly shortDescription: string;
-  readonly problemAddressed: string;
-  readonly mainFeatures: readonly string[];
+  readonly name: string;
+  readonly title?: string;
+  readonly category: string;
+  readonly problem: string;
+  readonly solution: string;
   readonly technologies: readonly string[];
-  readonly status: "Active" | "In Development" | "Planned";
-  readonly detailedInformation: string;
-  readonly externalUrl?: string;
-  readonly repoUrl?: string;
-  readonly isPlaceholder: boolean;
+  readonly status: "Active" | "In Development" | "Prototype" | "In Production";
+  readonly screenshot?: string;
+  readonly liveDemo?: string;
+  readonly githubRepo?: string;
+  readonly metrics?: string;
+  readonly isPrototype?: boolean;
 }
 
-export interface TeamMember {
-  readonly id: string;
-  readonly name: string;
-  readonly role: string;
-  readonly bio: string;
-  readonly photoUrl?: string;
-  readonly initials: string;
-  readonly skills: readonly string[];
-  readonly profileUrl?: string;
-  readonly isPlaceholder: boolean;
+export interface DifferenceItem {
+  readonly title: string;
+  readonly description: string;
+  readonly icon?: string;
 }
 
 export interface ContactChannel {
   readonly label: string;
   readonly value: string;
   readonly href: string;
-  readonly isPlaceholder?: boolean;
 }
 
 export interface SocialLink {

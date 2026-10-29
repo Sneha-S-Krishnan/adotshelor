@@ -33,94 +33,96 @@ export function Navbar({ isSettled = true }: NavbarProps) {
 
   return (
     <>
-      <header className="fixed top-0 inset-x-0 z-40 flex items-center justify-between gap-4 px-[clamp(14px,1.7vw,22px)] py-3 sm:py-4 pointer-events-none">
-        {/* Brand Hard Left */}
-        <div
-          id="navbar-logo-target"
-          className="pointer-events-auto transition-opacity duration-300 opacity-100"
-        >
-          <Logo size="md" href="/" textId="navbar-logo-text" />
-        </div>
-
-        {/* Centered Floating Pill Capsule (≥ lg / 1024px) */}
-        <nav
-          className="pointer-events-auto hidden lg:block p-[5px] border border-[var(--hair)] rounded-[14px] bg-[rgba(6,13,23,0.82)] backdrop-blur-[20px] shadow-[0_12px_32px_rgba(0,0,0,0.4)] transition-opacity duration-500 opacity-100"
-          aria-label="Primary"
-        >
-          <ul
-            className="flex items-center gap-[2px] m-0 p-0 list-none relative"
-            onMouseLeave={() => setHoveredIndex(null)}
+      <header className="fixed top-0 inset-x-0 z-40 pointer-events-none">
+        <div className="w-full max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between gap-4 py-3 sm:py-4">
+          {/* Brand Hard Left - Aligned to max-w-7xl content column */}
+          <div
+            id="navbar-logo-target"
+            className="pointer-events-auto transition-opacity duration-300 opacity-100"
           >
-            {NAVIGATION_ITEMS.map((link, idx) => {
-              const isActive =
-                link.href === "/"
-                  ? pathname === "/"
-                  : pathname === link.href || pathname?.startsWith(link.href + "/");
+            <Logo size="md" href="/" textId="navbar-logo-text" />
+          </div>
 
-              return (
-                <li key={link.label} className="relative">
-                  <Link
-                    href={link.href}
-                    onMouseEnter={() => setHoveredIndex(idx)}
-                    className={`relative z-10 inline-flex items-center gap-1.5 px-[15px] py-[8px] rounded-[10px] text-[13.5px] font-[500] transition-colors duration-200 select-none ${
-                      isActive
-                        ? "text-[#00D2EE]"
-                        : "text-white/75 hover:text-white"
-                    }`}
-                    aria-current={isActive ? "page" : undefined}
-                  >
-                    {link.label}
-                  </Link>
-
-                  {/* Spring layout active pill indicator (Emil Kowalski micro-interaction) */}
-                  {isActive && (
-                    <motion.div
-                      layoutId="navbar-active-pill"
-                      transition={{
-                        type: "spring",
-                        stiffness: 420,
-                        damping: 32,
-                      }}
-                      className="absolute inset-0 z-0 rounded-[10px] bg-[rgba(0,210,238,0.14)] border border-[rgba(0,210,238,0.3)] shadow-[0_0_15px_rgba(0,210,238,0.15)]"
-                    />
-                  )}
-
-                  {/* Subtle hover background preview */}
-                  {!isActive && hoveredIndex === idx && (
-                    <motion.div
-                      layoutId="navbar-hover-pill"
-                      transition={{
-                        type: "spring",
-                        stiffness: 450,
-                        damping: 35,
-                      }}
-                      className="absolute inset-0 z-0 rounded-[10px] bg-white/[0.06]"
-                    />
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        </nav>
-
-        {/* Hard Right CTA & Mobile Burger */}
-        <div className="pointer-events-auto flex items-center gap-2.5 transition-opacity duration-500 opacity-100">
-          <Link
-            className="btn btn--cyan text-[13.5px] font-semibold hidden sm:inline-flex px-5 py-2 rounded-xl shadow-[0_0_20px_rgba(0,210,238,0.25)] hover:shadow-[0_0_25px_rgba(0,210,238,0.4)] transition-all"
-            href="/contact"
+          {/* Centered Floating Pill Capsule (≥ lg / 1024px) */}
+          <nav
+            className="pointer-events-auto hidden lg:block p-[5px] border border-[var(--hair)] rounded-[14px] bg-[rgba(6,13,23,0.82)] backdrop-blur-[20px] shadow-[0_12px_32px_rgba(0,0,0,0.4)] transition-opacity duration-500 opacity-100"
+            aria-label="Primary"
           >
-            Let&apos;s Build
-          </Link>
+            <ul
+              className="flex items-center gap-[2px] m-0 p-0 list-none relative"
+              onMouseLeave={() => setHoveredIndex(null)}
+            >
+              {NAVIGATION_ITEMS.map((link, idx) => {
+                const isActive =
+                  link.href === "/"
+                    ? pathname === "/"
+                    : pathname === link.href || pathname?.startsWith(link.href + "/");
 
-          <button
-            className="lg:hidden flex items-center justify-center w-10 h-10 border border-[var(--hair)] rounded-[10px] bg-[rgba(11,25,44,0.7)] backdrop-blur-[10px] text-white cursor-pointer hover:border-[#00D2EE] transition-colors"
-            type="button"
-            aria-label={open ? "Close menu" : "Open menu"}
-            aria-expanded={open}
-            onClick={() => setOpen((v) => !v)}
-          >
-            {open ? <Close className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-          </button>
+                return (
+                  <li key={link.label} className="relative">
+                    <Link
+                      href={link.href}
+                      onMouseEnter={() => setHoveredIndex(idx)}
+                      className={`relative z-10 inline-flex items-center gap-1.5 px-[15px] py-[8px] rounded-[10px] text-[13.5px] font-[500] transition-colors duration-200 select-none ${
+                        isActive
+                          ? "text-[#00D2EE]"
+                          : "text-white/75 hover:text-white"
+                      }`}
+                      aria-current={isActive ? "page" : undefined}
+                    >
+                      {link.label}
+                    </Link>
+
+                    {/* Spring layout active pill indicator (Emil Kowalski micro-interaction) */}
+                    {isActive && (
+                      <motion.div
+                        layoutId="navbar-active-pill"
+                        transition={{
+                          type: "spring",
+                          stiffness: 420,
+                          damping: 32,
+                        }}
+                        className="absolute inset-0 z-0 rounded-[10px] bg-[rgba(0,210,238,0.14)] border border-[rgba(0,210,238,0.3)] shadow-[0_0_15px_rgba(0,210,238,0.15)]"
+                      />
+                    )}
+
+                    {/* Subtle hover background preview */}
+                    {!isActive && hoveredIndex === idx && (
+                      <motion.div
+                        layoutId="navbar-hover-pill"
+                        transition={{
+                          type: "spring",
+                          stiffness: 450,
+                          damping: 35,
+                        }}
+                        className="absolute inset-0 z-0 rounded-[10px] bg-white/[0.06]"
+                      />
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          </nav>
+
+          {/* Hard Right CTA & Mobile Burger - Aligned to max-w-7xl content column */}
+          <div className="pointer-events-auto flex items-center gap-2.5 transition-opacity duration-500 opacity-100">
+            <Link
+              className="btn btn--cyan text-[13.5px] font-semibold hidden sm:inline-flex px-5 py-2 rounded-xl shadow-[0_0_20px_rgba(0,210,238,0.25)] hover:shadow-[0_0_25px_rgba(0,210,238,0.4)] transition-all"
+              href="/contact"
+            >
+              Let&apos;s Build
+            </Link>
+
+            <button
+              className="lg:hidden flex items-center justify-center w-10 h-10 border border-[var(--hair)] rounded-[10px] bg-[rgba(11,25,44,0.7)] backdrop-blur-[10px] text-white cursor-pointer hover:border-[#00D2EE] transition-colors"
+              type="button"
+              aria-label={open ? "Close menu" : "Open menu"}
+              aria-expanded={open}
+              onClick={() => setOpen((v) => !v)}
+            >
+              {open ? <Close className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
+            </button>
+          </div>
         </div>
       </header>
 

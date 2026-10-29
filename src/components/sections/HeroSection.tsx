@@ -17,8 +17,7 @@ function getInitialReadyState(): boolean {
   return window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 }
 
-export function HeroSection(props?: HeroSectionProps) {
-  void props;
+export function HeroSection({ isSettled = true }: HeroSectionProps) {
   const videoRef = useRef<HTMLVideoElement>(null);
   const [ready, setReady] = useState<boolean>(getInitialReadyState);
 
@@ -31,10 +30,12 @@ export function HeroSection(props?: HeroSectionProps) {
       return;
     }
 
-    // Some browsers block autoplay until explicitly nudged
-    const play = video.play();
-    if (play?.catch) play.catch(() => {});
-  }, []);
+    if (isSettled) {
+      video.currentTime = 0;
+      const play = video.play();
+      if (play?.catch) play.catch(() => {});
+    }
+  }, [isSettled]);
 
   return (
     <section id="home" className="hero">

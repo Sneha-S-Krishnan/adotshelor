@@ -9,12 +9,12 @@ import {
 } from "@/types/portfolio";
 
 export const NAVIGATION_ITEMS: readonly NavItem[] = [
-  { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
-  { label: "Services", href: "#services" },
-  { label: "Projects", href: "#projects" },
-  { label: "Our Approach", href: "#approach" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Services", href: "/services" },
+  { label: "Projects", href: "/projects" },
+  { label: "Our Approach", href: "/approach" },
+  { label: "Contact", href: "/contact" },
 ];
 
 export const BRAND_INFO = {
@@ -254,15 +254,16 @@ export const SOCIAL_LINKS: readonly SocialLink[] = [
 ];
 
 export const FOOTER_SERVICES = [
-  { label: "Problem Solving", href: "#services" },
-  { label: "Idea-to-Product", href: "#services" },
-  { label: "Guided Development", href: "#services" },
+  { label: "Problem Solving", href: "/services#problem-solving" },
+  { label: "Idea-to-Product", href: "/services#idea-to-product" },
+  { label: "Guided Development", href: "/services#guided-development" },
 ];
 
 export const FOOTER_NAV = [
-  { label: "Home", href: "#home" },
-  { label: "About", href: "#about" },
-  { label: "Services", href: "#services" },
-  { label: "Projects", href: "#projects" },
-  { label: "Contact", href: "#contact" },
+  { label: "Home", href: "/" },
+  { label: "About", href: "/about" },
+  { label: "Services", href: "/services" },
+  { label: "Projects", href: "/projects" },
+  { label: "Our Approach", href: "/approach" },
+  { label: "Contact", href: "/contact" },
 ];

@@ -1,8 +1,10 @@
 "use client";
 
 import React, { useRef } from "react";
+import Link from "next/link";
 import { motion, useInView, useReducedMotion } from "motion/react";
 import { WORK_STAGES } from "@/data/portfolioData";
+import { ArrowRight } from "lucide-react";
 
 export function ProcessSection() {
   const ref = useRef<HTMLDivElement>(null);
@@ -100,6 +102,17 @@ export function ProcessSection() {
             );
           })}
         </div>
+      </div>
+
+      {/* Direct link to dedicated approach page */}
+      <div className="mt-14 text-center">
+        <Link
+          href="/approach"
+          className="btn btn--cyan px-7 py-3 rounded-xl font-semibold inline-flex items-center gap-2 shadow-[0_0_20px_rgba(0,210,238,0.25)] hover:shadow-[0_0_30px_rgba(0,210,238,0.4)] transition-all"
+        >
+          <span>Explore Complete 4-Stage Methodology</span>
+          <ArrowRight className="w-4 h-4" />
+        </Link>
       </div>
     </section>
   );

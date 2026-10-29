@@ -41,7 +41,7 @@ export function Footer({ onReplayIntro }: FooterProps = {}) {
         <div className="grid grid-cols-1 md:grid-cols-12 gap-10 lg:gap-12 pb-12 border-b border-[var(--hair)]">
           {/* Brand Column: Logo & Short brand description */}
           <div className="md:col-span-4 space-y-4">
-            <Logo size="md" href="#home" />
+            <Logo size="md" href="/" />
             <p className="text-sm text-white/70 leading-relaxed max-w-sm">
               {BRAND_INFO.subheadline}
             </p>

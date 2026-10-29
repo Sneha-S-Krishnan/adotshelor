@@ -1,8 +1,9 @@
 "use client";
 
 import React from "react";
+import Link from "next/link";
 import { DIFFERENCE_ITEMS } from "@/data/portfolioData";
-import { Target, MessageSquare, Cpu, Lightbulb, ShieldCheck } from "lucide-react";
+import { Target, MessageSquare, Cpu, Lightbulb, ShieldCheck, ArrowRight } from "lucide-react";
 
 export function DifferenceSection() {
   const getIcon = (idx: number) => {
@@ -75,6 +76,17 @@ export function DifferenceSection() {
             </div>
           </div>
         ))}
+      </div>
+
+      {/* Direct link to dedicated about page */}
+      <div className="mt-14 text-center">
+        <Link
+          href="/about"
+          className="btn btn--cyan px-7 py-3 rounded-xl font-semibold inline-flex items-center gap-2 shadow-[0_0_20px_rgba(0,210,238,0.25)] hover:shadow-[0_0_30px_rgba(0,210,238,0.4)] transition-all"
+        >
+          <span>Learn More About AdotShelor Studio &amp; Standards</span>
+          <ArrowRight className="w-4 h-4" />
+        </Link>
       </div>
     </section>
   );

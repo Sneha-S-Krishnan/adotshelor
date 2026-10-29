@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useEffect, useRef, useState } from "react";
+import Link from "next/link";
 import { ArrowRight, Globe } from "@/components/brand/Icons";
 import { BRAND_INFO, HERO_HIGHLIGHTS } from "@/data/portfolioData";
 import { CheckCircle2, Compass, Layers, ShieldCheck } from "lucide-react";
@@ -85,20 +86,20 @@ export function HeroSection(props?: HeroSectionProps) {
 
           {/* CTA Row: Primary & Secondary Buttons */}
           <div className="hero__cta">
-            <a className="btn btn--cyan hero__go" href="#contact">
+            <Link className="btn btn--cyan hero__go" href="/contact">
               {BRAND_INFO.primaryButtonText}
               <span className="hero__go-dot" aria-hidden="true">
                 <ArrowRight />
               </span>
-            </a>
+            </Link>
 
-            <a
+            <Link
               className="btn btn--ghost-cyan hero__secondary"
-              href="#projects"
+              href="/projects"
             >
               <Compass className="w-4 h-4 text-[#00d2ee]" />
               <span>{BRAND_INFO.secondaryButtonText}</span>
-            </a>
+            </Link>
           </div>
 
           {/* Key highlights: Practical Solutions, Transparent Process, Long-Term Support */}

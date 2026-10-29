@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useCallback } from "react";
+import React, { useState, useCallback, useEffect } from "react";
 import { BrandIntro } from "@/components/brand/BrandIntro";
 import { Navbar } from "@/components/layout/Navbar";
 import { HeroSection } from "@/components/sections/HeroSection";
@@ -14,6 +14,19 @@ import { Footer } from "@/components/layout/Footer";
 export default function Home() {
   const [isSettled, setIsSettled] = useState<boolean>(false);
   const [introKey, setIntroKey] = useState<number>(0);
+
+  useEffect(() => {
+    try {
+      if (
+        sessionStorage.getItem("adotshelor_intro_seen") === "true" ||
+        window.matchMedia("(prefers-reduced-motion: reduce)").matches
+      ) {
+        setIsSettled(true);
+      }
+    } catch {
+      // Ignore storage errors
+    }
+  }, []);
 
   const handleComplete = useCallback(() => {
     setIsSettled(true);

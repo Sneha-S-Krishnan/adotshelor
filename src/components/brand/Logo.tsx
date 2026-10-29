@@ -50,7 +50,7 @@ const sizeClasses: Record<
 export function Logo({
   size = "md",
   asLink = true,
-  href = "#main",
+  href = "/",
   className = "",
   showCursor = false,
   textId,

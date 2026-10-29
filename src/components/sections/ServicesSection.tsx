@@ -1,6 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
+import Link from "next/link";
 import { motion, AnimatePresence, useReducedMotion } from "motion/react";
 import { SERVICE_PILLARS } from "@/data/portfolioData";
 import {
@@ -302,6 +303,17 @@ export function ServicesSection() {
             </motion.article>
           );
         })}
+      </div>
+
+      {/* Direct link to dedicated services page */}
+      <div className="mt-14 text-center">
+        <Link
+          href="/services"
+          className="btn btn--cyan px-7 py-3 rounded-xl font-semibold inline-flex items-center gap-2 shadow-[0_0_20px_rgba(0,210,238,0.25)] hover:shadow-[0_0_30px_rgba(0,210,238,0.4)] transition-all"
+        >
+          <span>Explore All 3 Services &amp; Deliverables</span>
+          <ArrowRight className="w-4 h-4" />
+        </Link>
       </div>
     </section>
   );

@@ -2,8 +2,9 @@
 
 import React, { useRef } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { PROJECTS_DATA } from "@/data/portfolioData";
-import { ExternalLink, GitBranch, ChevronLeft, ChevronRight, CheckCircle2, Clock } from "lucide-react";
+import { ExternalLink, GitBranch, ChevronLeft, ChevronRight, CheckCircle2, Clock, ArrowRight } from "lucide-react";
 
 export function ProjectsSection() {
   const scrollRef = useRef<HTMLDivElement>(null);
@@ -178,6 +179,17 @@ export function ProjectsSection() {
             </div>
           </article>
         ))}
+      </div>
+
+      {/* Link to dedicated projects page */}
+      <div className="mt-14 text-center">
+        <Link
+          href="/projects"
+          className="btn btn--cyan px-7 py-3 rounded-xl font-semibold inline-flex items-center gap-2 shadow-[0_0_20px_rgba(0,210,238,0.25)] hover:shadow-[0_0_30px_rgba(0,210,238,0.4)] transition-all"
+        >
+          <span>View All Case Studies &amp; Architecture Details</span>
+          <ArrowRight className="w-4 h-4" />
+        </Link>
       </div>
     </section>
   );

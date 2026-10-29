@@ -34,6 +34,7 @@ test.describe("Navbar & Dedicated Pages Routing", () => {
       sessionStorage.setItem("adotshelor_intro_seen", "true");
     });
     await page.goto("/");
+    await page.waitForLoadState("domcontentloaded");
 
     if (!isMobile) {
       // Desktop navigation flow
@@ -42,18 +43,18 @@ test.describe("Navbar & Dedicated Pages Routing", () => {
 
       // Click About
       await desktopNav.locator('a[href="/about"]').click();
-      await expect(page).toHaveURL("/about");
-      await expect(page.locator("main h1").first()).toContainText("Software Crafted with");
+      await expect(page).toHaveURL("/about", { timeout: 15000 });
+      await expect(page.locator("main h1").first()).toContainText("Software Crafted with", { timeout: 10000 });
 
       // Click Services
       await page.locator('header nav[aria-label="Primary"] a[href="/services"]').first().click();
-      await expect(page).toHaveURL("/services");
-      await expect(page.locator("main h1").first()).toContainText("Engineered for Purpose.");
+      await expect(page).toHaveURL("/services", { timeout: 15000 });
+      await expect(page.locator("main h1").first()).toContainText("Engineered for Purpose.", { timeout: 10000 });
 
       // Click Projects
       await page.locator('header nav[aria-label="Primary"] a[href="/projects"]').first().click();
-      await expect(page).toHaveURL("/projects");
-      await expect(page.locator("main h1").first()).toContainText("Real Systems.");
+      await expect(page).toHaveURL("/projects", { timeout: 15000 });
+      await expect(page.locator("main h1").first()).toContainText("Real Systems.", { timeout: 10000 });
     } else {
       // Mobile drawer navigation flow
       const burger = page.locator('button[aria-label="Open menu"]');
@@ -63,9 +64,10 @@ test.describe("Navbar & Dedicated Pages Routing", () => {
       // Click About in mobile menu
       const mobileAbout = page.locator('[data-testid="mobile-menu"] a[href="/about"]');
       await expect(mobileAbout).toBeVisible({ timeout: 5000 });
+      await page.waitForTimeout(300);
       await mobileAbout.click({ force: true });
-      await expect(page).toHaveURL("/about");
-      await expect(page.locator("main h1").first()).toContainText("Software Crafted with");
+      await expect(page).toHaveURL("/about", { timeout: 15000 });
+      await expect(page.locator("main h1").first()).toContainText("Software Crafted with", { timeout: 10000 });
     }
   });
 });

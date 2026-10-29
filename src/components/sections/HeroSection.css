@@ -9,7 +9,7 @@
   flex-direction: column;
   min-height: 100svh;
   overflow: hidden;
-  padding: calc(108px * var(--scale)) var(--gutter) calc(48px * var(--scale));
+  padding: calc(108px * var(--scale)) 0 calc(48px * var(--scale));
   background: linear-gradient(165deg, var(--ground) 0%, var(--ground-deep) 70%);
 }
 
@@ -40,6 +40,7 @@
 .hero__scrim {
   position: absolute;
   inset: 0;
+  pointer-events: none;
   background:
     linear-gradient(96deg, rgba(6, 13, 23, 0.95) 0%, rgba(11, 25, 44, 0.82) 35%,
       rgba(11, 25, 44, 0.35) 60%, rgba(6, 13, 23, 0.15) 80%),
@@ -70,6 +71,26 @@
   grid-template-columns: minmax(0, 1fr);
   align-content: center;
   gap: 40px;
+  width: 100%;
+  max-width: 80rem; /* matches max-w-7xl */
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: 1rem; /* matches px-4 */
+  padding-right: 1rem;
+}
+
+@media (min-width: 640px) {
+  .hero__inner {
+    padding-left: 1.5rem; /* matches sm:px-6 */
+    padding-right: 1.5rem;
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero__inner {
+    padding-left: 2rem; /* matches lg:px-8 */
+    padding-right: 2rem;
+  }
 }
 
 .hero__lead {

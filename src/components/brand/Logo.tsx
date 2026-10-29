@@ -9,6 +9,7 @@ export interface LogoProps {
   readonly className?: string;
   readonly showCursor?: boolean;
   readonly textId?: string;
+  readonly onClick?: () => void;
 }
 
 const sizeClasses: Record<
@@ -54,6 +55,7 @@ export function Logo({
   className = "",
   showCursor = false,
   textId,
+  onClick,
 }: LogoProps) {
   const currentSize = sizeClasses[size];
 
@@ -84,6 +86,7 @@ export function Logo({
     return (
       <Link
         href={href}
+        onClick={onClick}
         className="inline-flex items-center focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#00D2EE] focus-visible:ring-offset-2 rounded-lg py-1 px-1.5 -mx-1.5 transition-opacity hover:opacity-90"
         aria-label="AdotShelor.com Home"
       >

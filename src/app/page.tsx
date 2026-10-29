@@ -43,22 +43,22 @@ export default function Home() {
       <Navbar isSettled={isSettled} />
 
       <main id="main" className="flex-1">
-        {/* 02. Hero Section — First Impression */}
-        <HeroSection isSettled={isSettled} />
+        {/* Home */}
+        <HeroSection />
 
-        {/* 03-06. Our Three Core Services */}
-        <ServicesSection />
-
-        {/* 07. Our Approach — How We Work */}
-        <ProcessSection />
-
-        {/* 08. Projects Section — Real Projects. Real Solutions. */}
-        <ProjectsSection />
-
-        {/* 09. Why Choose AdotShelor? — More Than Just Development. */}
+        {/* About */}
         <DifferenceSection />
 
-        {/* 10. Contact / Let's Build */}
+        {/* Services */}
+        <ServicesSection />
+
+        {/* Projects */}
+        <ProjectsSection />
+
+        {/* Our Approach */}
+        <ProcessSection />
+
+        {/* Contact */}
         <ContactSection />
       </main>
 

@@ -3,7 +3,7 @@
 import React, { useState, useEffect } from "react";
 import { NAVIGATION_ITEMS } from "@/data/portfolioData";
 import { Logo } from "@/components/brand/Logo";
-import { ResizableNavbar } from "@/components/velora/resizable-navbar";
+import { ResizableNavbar } from "@/components/effects/resizable-navbar";
 
 export interface NavbarProps {
   readonly isSettled?: boolean;

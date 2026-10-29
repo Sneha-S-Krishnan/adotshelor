@@ -1,10 +1,10 @@
 import { ArrowRightIcon, StarIcon } from "lucide-react";
 
-import { AvatarCircles } from "@/components/velora/avatar-circles";
-import { BlurFade } from "@/components/velora/blur-fade";
-import { FlipWords } from "@/components/velora/flip-words";
-import { ShimmerButton } from "@/components/velora/shimmer-button";
-import { WavyBackground } from "@/components/velora/wavy-background";
+import { AvatarCircles } from "@/components/effects/avatar-circles";
+import { BlurFade } from "@/components/effects/blur-fade";
+import { FlipWords } from "@/components/effects/flip-words";
+import { ShimmerButton } from "@/components/effects/shimmer-button";
+import { WavyBackground } from "@/components/effects/wavy-background";
 
 const WORDS = ["alive", "effortless", "yours"];
 

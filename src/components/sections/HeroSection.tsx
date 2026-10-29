@@ -3,7 +3,7 @@
 import { ArrowRight, Globe } from "@/components/brand/Icons";
 import { BRAND_INFO, HERO_HIGHLIGHTS } from "@/data/portfolioData";
 import { CheckCircle2, Layers, ShieldCheck } from "lucide-react";
-import { WavyBackground } from "@/components/velora/wavy-background";
+import { WavyBackground } from "@/components/effects/wavy-background";
 
 const HIGHLIGHT_ICONS = [CheckCircle2, Layers, ShieldCheck] as const;
 

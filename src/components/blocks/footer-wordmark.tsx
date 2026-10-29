@@ -8,7 +8,7 @@ import {
   X,
 } from "lucide-react";
 
-import { TextHoverEffect } from "@/components/velora/text-hover-effect";
+import { TextHoverEffect } from "@/components/effects/text-hover-effect";
 import {
   BRAND_INFO,
   CONTACT_CHANNELS,

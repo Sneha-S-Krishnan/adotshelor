@@ -9,8 +9,8 @@ import {
 } from "lucide-react";
 import { AnimatePresence, motion, useReducedMotion } from "motion/react";
 
-import { HoverCards } from "@/components/velora/card-hover-effect";
-import { ImageSlider } from "@/components/velora/image-slider";
+import { HoverCards } from "@/components/effects/card-hover-effect";
+import { ImageSlider } from "@/components/effects/image-slider";
 import { PROJECTS_DATA } from "@/data/portfolioData";
 
 const projectSlides = PROJECTS_DATA.flatMap((project) =>

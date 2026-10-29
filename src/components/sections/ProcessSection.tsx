@@ -1,4 +1,4 @@
-import { StickyScroll } from "@/components/velora/sticky-scroll";
+import { StickyScroll } from "@/components/effects/sticky-scroll";
 import { WORK_STAGES } from "@/data/portfolioData";
 
 const items = WORK_STAGES.map((stage) => ({

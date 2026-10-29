@@ -181,6 +181,24 @@ a {
   box-shadow: 0 20px 52px rgba(0, 210, 238, 0.48);
 }
 
+.contact-choice {
+  color: var(--ink);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background-color: rgba(8, 15, 24, 0.55);
+}
+.contact-choice[aria-pressed="true"] {
+  border-color: rgba(98, 217, 235, 0.55);
+  background-color: rgba(0, 210, 238, 0.08);
+}
+.contact-choice:hover:not([aria-pressed="true"]) {
+  border-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.035);
+}
+.contact-choice:focus-visible {
+  outline: 2px solid #62d9eb;
+  outline-offset: 2px;
+}
+
 /* Deep Navy Glass Container Utilities */
 .warm-glass,
 .navy-glass {

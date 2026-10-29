@@ -15,11 +15,6 @@ export interface NavbarProps {
 export function Navbar({ isSettled = true }: NavbarProps) {
   const [activeSection, setActiveSection] = useState<string>("home");
 
-  // Track active section as user scrolls
-  useEffect(() => {
-    setOpen(false);
-  }, [pathname]);
-
   return (
     <ResizableNavbar
       items={[...NAVIGATION_ITEMS]}

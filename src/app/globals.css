@@ -2,12 +2,14 @@
 @import "tailwindcss";
 @import "../components/sections/HeroSection.css";
 
+@custom-variant dark (&:is(.dark *));
+
 /* AdotShelor Deep Navy Blue Design System Tokens */
 @theme {
   --color-ground-deep: #060d17;
   --color-ground: #0b192c;
   --color-ground-soft: #14263d;
-  
+
   --color-cyan: #00d2ee;
   --color-cyan-lit: #38bdf8;
   --color-cyan-glow: rgba(0, 210, 238, 0.35);
@@ -24,6 +26,16 @@
   --color-glass-strong: rgba(6, 13, 23, 0.75);
   --color-hair: rgba(0, 210, 238, 0.16);
   --color-hair-soft: rgba(255, 255, 255, 0.08);
+
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-border: var(--hair);
+  --color-muted: var(--ground-soft);
+  --color-muted-foreground: var(--ink-soft);
+  --color-ring: var(--cyan);
+  --color-popover: var(--ground-deep);
+  --color-popover-foreground: var(--foreground);
+  --color-brand: var(--cyan);
 
   --font-display: 'Inter Tight', var(--font-geist-sans), system-ui, -apple-system, sans-serif;
   --font-body: 'Inter', var(--font-geist-sans), system-ui, -apple-system, sans-serif;
@@ -42,6 +54,9 @@
   --cyan: #00d2ee;
   --cyan-lit: #38bdf8;
   --cyan-glow: rgba(0, 210, 238, 0.35);
+  --brand-from: #0284c7;
+  --brand-via: #00d2ee;
+  --brand-to: #38bdf8;
   --amber: #f59e0b;
 
   /* Navy glass tint */
@@ -59,6 +74,7 @@
 
   --background: #060d17;
   --foreground: #ffffff;
+  --brand: oklch(0.546 0.245 263);
 }
 
 html {
@@ -165,6 +181,24 @@ a {
   box-shadow: 0 20px 52px rgba(0, 210, 238, 0.48);
 }
 
+.contact-choice {
+  color: var(--ink);
+  border: 1px solid rgba(255, 255, 255, 0.09);
+  background-color: rgba(8, 15, 24, 0.55);
+}
+.contact-choice[aria-pressed="true"] {
+  border-color: rgba(98, 217, 235, 0.55);
+  background-color: rgba(0, 210, 238, 0.08);
+}
+.contact-choice:hover:not([aria-pressed="true"]) {
+  border-color: rgba(255, 255, 255, 0.2);
+  background-color: rgba(255, 255, 255, 0.035);
+}
+.contact-choice:focus-visible {
+  outline: 2px solid #62d9eb;
+  outline-offset: 2px;
+}
+
 /* Deep Navy Glass Container Utilities */
 .warm-glass,
 .navy-glass {
@@ -212,4 +246,27 @@ a {
     animation-iteration-count: 1 !important;
     transition-duration: 0.001ms !important;
   }
+}
+
+@theme inline {
+  --animate-shimmer: shimmer 2.5s linear infinite;
+  @keyframes shimmer {
+  from {
+    background-position: 200% 0;
+    }
+  to {
+    background-position: -200% 0;
+    }
+  }
+  --color-brand: var(--brand);
+  --color-brand-from: var(--brand-from);
+  --color-brand-via: var(--brand-via);
+  --color-brand-to: var(--brand-to)
+}
+
+.dark {
+  --brand: oklch(0.623 0.214 260);
+  --brand-from: oklch(0.623 0.214 260);
+  --brand-via: oklch(0.707 0.165 255);
+  --brand-to: oklch(0.746 0.16 233);
 }

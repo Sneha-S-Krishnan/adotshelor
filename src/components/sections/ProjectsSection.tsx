@@ -1,196 +1,223 @@
 "use client";
 
-import React, { useRef } from "react";
-import Image from "next/image";
-import Link from "next/link";
+import { useState } from "react";
+import {
+  CheckCircle2,
+  Clock,
+  ExternalLink,
+  GitBranch,
+} from "lucide-react";
+import { AnimatePresence, motion, useReducedMotion } from "motion/react";
+
+import { HoverCards } from "@/components/effects/card-hover-effect";
+import { ImageSlider } from "@/components/effects/image-slider";
 import { PROJECTS_DATA } from "@/data/portfolioData";
-import { ExternalLink, GitBranch, ChevronLeft, ChevronRight, CheckCircle2, Clock, ArrowRight } from "lucide-react";
+
+const projectSlides = PROJECTS_DATA.flatMap((project) =>
+  project.screenshot
+    ? [
+        {
+          project,
+          src: project.screenshot,
+          alt: `${project.name} project preview`,
+        },
+      ]
+    : []
+);
+const sliderImages = projectSlides.map(({ src, alt }) => ({ src, alt }));
 
 export function ProjectsSection() {
-  const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeSlide, setActiveSlide] = useState(0);
+  const reducedMotion = useReducedMotion();
+  const activeProject = projectSlides[activeSlide]?.project;
 
-  const scroll = (direction: "left" | "right") => {
-    if (scrollRef.current) {
-      const offset = direction === "left" ? -440 : 440;
-      scrollRef.current.scrollBy({ left: offset, behavior: "smooth" });
-    }
-  };
+  const projectSelectors = projectSlides.map(({ project }, index) => ({
+    title: project.name,
+    description: project.category,
+    onHover: () => setActiveSlide(index),
+    content: (
+      <button
+        type="button"
+        aria-pressed={activeSlide === index}
+        onClick={() => setActiveSlide(index)}
+        className={`flex h-full w-full items-center gap-3 rounded-xl border px-4 py-3 text-left transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00d2ee] ${
+          activeSlide === index
+            ? "border-[#00d2ee]/50 bg-[#00d2ee]/10"
+            : "border-[var(--hair)] bg-[rgba(11,25,44,0.55)] hover:border-[#00d2ee]/30"
+        }`}
+      >
+        <span className="font-mono text-xs font-bold text-[#00d2ee]">
+          {String(index + 1).padStart(2, "0")}
+        </span>
+        <span className="min-w-0">
+          <span className="block truncate text-sm font-semibold text-white">
+            {project.name}
+          </span>
+          <span className="mt-0.5 block text-xs text-white/55">
+            {project.category}
+          </span>
+        </span>
+      </button>
+    ),
+  }));
 
   return (
     <section
       id="projects"
-      className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-[var(--hair-soft)] relative scroll-mt-12"
+      className="relative mx-auto max-w-7xl scroll-mt-12 border-t border-[var(--hair-soft)] px-4 py-20 sm:px-6 sm:py-28 lg:px-8"
     >
-      {/* Header and horizontal scroll controls */}
-      <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-10 sm:mb-14">
-        <div className="max-w-2xl">
-          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-semibold bg-[rgba(0,210,238,0.12)] text-[#00d2ee] border border-[rgba(0,210,238,0.28)] mb-3">
-            Projects and Portfolio
-          </span>
-          <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-white tracking-tight">
-            Real Projects. Real Solutions.
-          </h2>
-          <p className="mt-3 text-base sm:text-lg text-white/70 leading-relaxed">
-            Showcasing our strongest projects built with disciplined software engineering,
-            functional design, and maintainable architecture.
-          </p>
-        </div>
-
-        {/* Scroll Buttons for horizontal track */}
-        <div className="hidden sm:flex items-center gap-2">
-          <button
-            type="button"
-            onClick={() => scroll("left")}
-            aria-label="Scroll projects left"
-            className="w-10 h-10 rounded-full border border-[var(--hair)] bg-[rgba(11,25,44,0.55)] text-white hover:bg-[rgba(0,210,238,0.2)] hover:border-[#00d2ee] flex items-center justify-center transition-colors cursor-pointer"
-          >
-            <ChevronLeft className="w-5 h-5" />
-          </button>
-          <button
-            type="button"
-            onClick={() => scroll("right")}
-            aria-label="Scroll projects right"
-            className="w-10 h-10 rounded-full border border-[var(--hair)] bg-[rgba(11,25,44,0.55)] text-white hover:bg-[rgba(0,210,238,0.2)] hover:border-[#00d2ee] flex items-center justify-center transition-colors cursor-pointer"
-          >
-            <ChevronRight className="w-5 h-5" />
-          </button>
-        </div>
+      <div className="mb-10 max-w-3xl sm:mb-14">
+        <span className="mb-3 inline-flex items-center gap-1.5 rounded-full border border-[rgba(0,210,238,0.28)] bg-[rgba(0,210,238,0.12)] px-3 py-1 text-xs font-semibold text-[#00d2ee]">
+          Projects and Portfolio
+        </span>
+        <h2 className="text-3xl font-extrabold tracking-tight text-white sm:text-4xl lg:text-5xl">
+          Real Projects. Real Solutions.
+        </h2>
+        <p className="mt-3 text-base leading-relaxed text-white/70 sm:text-lg">
+          Showcasing our strongest projects built with disciplined software
+          engineering, functional design, and maintainable architecture.
+        </p>
       </div>
 
-      {/* Grid / Horizontal Snap Scroll Track */}
-      <div
-        ref={scrollRef}
-        className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 focus:outline-none"
-      >
-        {PROJECTS_DATA.map((project) => (
-          <article
-            key={project.id}
-            className="flex flex-col justify-between rounded-3xl bg-[rgba(11,25,44,0.6)] backdrop-blur-xl border border-[var(--hair)] overflow-hidden shadow-xl hover:border-[#00d2ee]/60 hover:shadow-[0_16px_40px_rgba(0,210,238,0.15)] transition-all duration-300"
-          >
-            <div>
-              {/* Project Screenshot / Visual Preview */}
-              {project.screenshot && (
-                <div className="relative aspect-[16/9] w-full bg-black/60 overflow-hidden border-b border-[var(--hair)] group">
-                  <Image
-                    src={project.screenshot}
-                    alt={`${project.name} screenshot`}
-                    fill
-                    className="object-cover group-hover:scale-105 transition-transform duration-500"
-                    sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
-                  />
-                  <div className="absolute inset-0 bg-gradient-to-t from-[rgba(6,13,23,0.85)] via-transparent to-transparent pointer-events-none" />
+      {activeProject && (
+        <article className="group/project overflow-hidden rounded-3xl border border-[var(--hair)] bg-[rgba(11,25,44,0.58)] shadow-2xl shadow-black/20 backdrop-blur-xl transition duration-300 hover:border-[#00d2ee]/45 hover:shadow-[0_24px_70px_rgba(0,210,238,0.12)]">
+          <div className="grid lg:min-h-[560px] lg:grid-cols-[1.02fr_0.98fr] lg:items-stretch">
+            <ImageSlider
+              images={sliderImages}
+              index={activeSlide}
+              onIndexChange={setActiveSlide}
+              autoplay={false}
+              showPlaybackControl={false}
+              label="Project previews"
+              className="h-[clamp(250px,48vw,420px)] border-b border-[var(--hair)] lg:h-full lg:min-h-[560px] lg:border-r lg:border-b-0"
+            >
+              <div className="absolute inset-x-0 top-0 flex items-start justify-between gap-3 p-4 sm:p-6">
+                <span className="rounded-full border border-white/20 bg-black/40 px-3 py-1.5 text-[10px] font-semibold uppercase tracking-wider text-white/90 backdrop-blur sm:text-xs">
+                  {activeProject.category}
+                </span>
+                <span className="rounded-full border border-white/20 bg-black/40 px-3 py-1.5 font-mono text-[10px] font-semibold text-white/90 backdrop-blur sm:text-xs">
+                  {String(activeSlide + 1).padStart(2, "0")} /{" "}
+                  {String(projectSlides.length).padStart(2, "0")}
+                </span>
+              </div>
+            </ImageSlider>
 
-                  {/* Category Pill Tag */}
-                  <div className="absolute top-3 left-3">
-                    <span className="px-2.5 py-1 rounded-md text-[11px] font-mono font-bold bg-[rgba(6,13,23,0.8)] backdrop-blur-md text-[#00d2ee] border border-[var(--hair)]">
-                      {project.category}
+            <div className="flex min-h-[500px] flex-col p-5 sm:p-8 lg:min-h-0 lg:p-9 xl:p-10">
+              <AnimatePresence mode="wait" initial={false}>
+                <motion.div
+                  key={activeProject.id}
+                  initial={{ opacity: 0, x: reducedMotion ? 0 : 12 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: reducedMotion ? 0 : -12 }}
+                  transition={{ duration: reducedMotion ? 0 : 0.2 }}
+                  className="flex h-full min-h-[450px] flex-col lg:min-h-full"
+                >
+                  <div className="flex min-h-7 items-center justify-between gap-3">
+                    <span className="text-xs font-semibold uppercase tracking-[0.14em] text-[#00d2ee]">
+                      Featured project
+                    </span>
+                    <span
+                      className={`inline-flex shrink-0 items-center gap-1.5 rounded-full border px-2.5 py-1 text-[10px] font-semibold ${
+                        activeProject.status === "Active"
+                          ? "border-[#00d2ee]/30 bg-[#00d2ee]/10 text-[#38bdf8]"
+                          : "border-[#f59e0b]/30 bg-[#f59e0b]/10 text-[#fbbf24]"
+                      }`}
+                    >
+                      {activeProject.status === "Active" ? (
+                        <CheckCircle2 className="size-3" aria-hidden="true" />
+                      ) : (
+                        <Clock className="size-3" aria-hidden="true" />
+                      )}
+                      {activeProject.status}
                     </span>
                   </div>
 
-                  {/* Project Status Badge */}
-                  <div className="absolute top-3 right-3">
-                    {project.status === "Active" ? (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-[rgba(0,210,238,0.2)] backdrop-blur-md text-[#38bdf8] border border-[#00d2ee]/40">
-                        <CheckCircle2 className="w-3 h-3 text-[#00d2ee]" />
-                        Active
-                      </span>
+                  <h3 className="mt-4 text-2xl font-bold leading-tight tracking-tight text-white sm:text-3xl">
+                    {activeProject.name}
+                  </h3>
+                  {activeProject.metrics && (
+                    <p className="mt-2 text-xs font-medium text-white/55">
+                      {activeProject.metrics}
+                    </p>
+                  )}
+
+                  <div className="mt-6 grid gap-3">
+                    <div className="rounded-xl border border-[var(--hair)] bg-black/20 p-3.5 sm:p-4">
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-[#00d2ee]">
+                        Problem
+                      </p>
+                      <p className="mt-1.5 text-xs leading-relaxed text-white/70 sm:text-sm">
+                        {activeProject.problem}
+                      </p>
+                    </div>
+                    <div className="rounded-xl border border-[var(--hair)] bg-[rgba(14,35,62,0.38)] p-3.5 sm:p-4">
+                      <p className="text-[10px] font-bold uppercase tracking-wider text-white/80">
+                        Solution
+                      </p>
+                      <p className="mt-1.5 text-xs leading-relaxed text-white/75 sm:text-sm">
+                        {activeProject.solution}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-5">
+                    <p className="text-[10px] font-bold uppercase tracking-wider text-white/45">
+                      Technologies
+                    </p>
+                    <ul className="mt-2 flex flex-wrap gap-1.5">
+                      {activeProject.technologies.map((technology) => (
+                        <li
+                          key={technology}
+                          className="rounded-md border border-[var(--hair)] bg-white/[0.04] px-2 py-1 text-[10px] font-medium text-white/75"
+                        >
+                          {technology}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+
+                  <div className="mt-auto flex flex-wrap items-center justify-between gap-3 border-t border-[var(--hair)] pt-5">
+                    {activeProject.liveDemo ? (
+                      <a
+                        href={activeProject.liveDemo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-xs font-bold text-[#00d2ee] transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00d2ee]"
+                      >
+                        Live Demo
+                        <ExternalLink className="size-3.5" aria-hidden="true" />
+                      </a>
                     ) : (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-[11px] font-bold bg-[rgba(245,158,11,0.2)] backdrop-blur-md text-[#f59e0b] border border-[#f59e0b]/40">
-                        <Clock className="w-3 h-3 text-[#f59e0b]" />
-                        {project.status}
+                      <span className="text-xs italic text-white/40">
+                        Demo on request
                       </span>
                     )}
-                  </div>
-                </div>
-              )}
 
-              {/* Card Body */}
-              <div className="p-6">
-                <h3 className="text-xl font-bold text-white tracking-tight">
-                  {project.name}
-                </h3>
-
-                {/* Problem Addressed */}
-                <div className="mt-4 p-3.5 rounded-xl bg-black/35 border border-[var(--hair)] text-xs">
-                  <span className="font-bold text-[#00d2ee] block mb-1">
-                    Problem Addressed:
-                  </span>
-                  <p className="text-white/75 leading-relaxed">
-                    {project.problem}
-                  </p>
-                </div>
-
-                {/* Solution Developed */}
-                <div className="mt-3 p-3.5 rounded-xl bg-[rgba(14,35,62,0.45)] border border-[var(--hair)] text-xs">
-                  <span className="font-bold text-white block mb-1">
-                    Solution Developed:
-                  </span>
-                  <p className="text-white/80 leading-relaxed">
-                    {project.solution}
-                  </p>
-                </div>
-
-                {/* Technologies Used */}
-                <div className="mt-4">
-                  <span className="block text-[10px] font-bold uppercase tracking-wider text-white/50 mb-1.5">
-                    Technologies Used:
-                  </span>
-                  <div className="flex flex-wrap gap-1.5">
-                    {project.technologies.map((tech) => (
-                      <span
-                        key={tech}
-                        className="px-2 py-0.5 rounded text-[11px] font-medium bg-[rgba(255,255,255,0.06)] text-white/80 border border-[var(--hair)]"
+                    {activeProject.githubRepo && (
+                      <a
+                        href={activeProject.githubRepo}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="inline-flex items-center gap-1.5 text-xs font-semibold text-white/65 transition-colors hover:text-white focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#00d2ee]"
                       >
-                        {tech}
-                      </span>
-                    ))}
+                        <GitBranch className="size-3.5" aria-hidden="true" />
+                        GitHub Repository
+                      </a>
+                    )}
                   </div>
-                </div>
-              </div>
+                </motion.div>
+              </AnimatePresence>
             </div>
+          </div>
+        </article>
+      )}
 
-            {/* Footer Action Links: Live Demo & GitHub */}
-            <div className="p-6 pt-0 mt-2 border-t border-[var(--hair)] flex items-center justify-between gap-3">
-              {project.liveDemo ? (
-                <a
-                  href={project.liveDemo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#00d2ee] hover:underline"
-                >
-                  <span>Live Demo</span>
-                  <ExternalLink className="w-3.5 h-3.5" />
-                </a>
-              ) : (
-                <span className="text-xs text-white/40 italic">Demo on request</span>
-              )}
-
-              {project.githubRepo ? (
-                <a
-                  href={project.githubRepo}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-white/70 hover:text-white transition-colors"
-                >
-                  <GitBranch className="w-3.5 h-3.5" />
-                  <span>GitHub Repository</span>
-                </a>
-              ) : null}
-            </div>
-          </article>
-        ))}
-      </div>
-
-      {/* Link to dedicated projects page */}
-      <div className="mt-14 text-center">
-        <Link
-          href="/projects"
-          className="btn btn--cyan px-7 py-3 rounded-xl font-semibold inline-flex items-center gap-2 shadow-[0_0_20px_rgba(0,210,238,0.25)] hover:shadow-[0_0_30px_rgba(0,210,238,0.4)] transition-all"
-        >
-          <span>View All Case Studies &amp; Architecture Details</span>
-          <ArrowRight className="w-4 h-4" />
-        </Link>
-      </div>
+      <HoverCards
+        items={projectSelectors}
+        columns={3}
+        aria-label="Select a project"
+        className="mt-5 [&>ul>li]:p-2"
+      />
     </section>
   );
 }

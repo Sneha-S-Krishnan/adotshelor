@@ -112,7 +112,7 @@ export function ContactSection() {
     <section
       id="contact"
       aria-labelledby="contact-heading"
-      className="relative overflow-hidden border-t border-white/[0.08] bg-[#080f18] py-24 text-white sm:py-32"
+      className="relative overflow-hidden border-t border-white/[0.08] bg-[#080f18] py-24 text-white sm:py-32 scroll-mt-16"
     >
       <div
         aria-hidden="true"

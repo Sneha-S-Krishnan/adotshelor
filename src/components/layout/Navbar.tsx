@@ -1,10 +1,7 @@
 "use client";
 
 import React, { useState, useEffect } from "react";
-import Link from "next/link";
-import { usePathname } from "next/navigation";
-import { motion, AnimatePresence } from "motion/react";
-import { NAVIGATION_ITEMS, SOCIAL_LINKS, CONTACT_CHANNELS } from "@/data/portfolioData";
+import { NAVIGATION_ITEMS } from "@/data/portfolioData";
 import { Logo } from "@/components/brand/Logo";
 import { ResizableNavbar } from "@/components/effects/resizable-navbar";
 
@@ -15,17 +12,37 @@ export interface NavbarProps {
 export function Navbar({ isSettled = true }: NavbarProps) {
   const [activeSection, setActiveSection] = useState<string>("home");
 
+  useEffect(() => {
+    const sectionIds = ["home", "services", "approach", "projects", "about", "contact"];
+
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 180;
+
+      for (let i = sectionIds.length - 1; i >= 0; i--) {
+        const id = sectionIds[i];
+        const element = document.getElementById(id);
+        if (element) {
+          const top = element.offsetTop;
+          if (scrollPosition >= top) {
+            setActiveSection(id);
+            break;
+          }
+        }
+      }
+    };
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
   return (
     <ResizableNavbar
       items={[...NAVIGATION_ITEMS]}
       threshold={80}
       compactWidth={920}
       maxWidth={1280}
-      activeHref={
-        NAVIGATION_ITEMS.find(
-          (item) => item.href.slice(1) === activeSection
-        )?.href
-      }
+      activeHref={`#${activeSection}`}
       label="Primary"
       logo={
         <div id="navbar-logo-target">

@@ -80,13 +80,13 @@ export function DifferenceSection() {
 
       {/* Direct link to dedicated about page */}
       <div className="mt-14 text-center">
-        <Link
-          href="/about"
+        <a
+          href="#contact"
           className="btn btn--cyan px-7 py-3 rounded-xl font-semibold inline-flex items-center gap-2 shadow-[0_0_20px_rgba(0,210,238,0.25)] hover:shadow-[0_0_30px_rgba(0,210,238,0.4)] transition-all"
         >
-          <span>Learn More About AdotShelor Studio &amp; Standards</span>
+          <span>Work With Us &bull; Discuss Your Project</span>
           <ArrowRight className="w-4 h-4" />
-        </Link>
+        </a>
       </div>
     </section>
   );

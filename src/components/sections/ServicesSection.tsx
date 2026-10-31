@@ -57,7 +57,7 @@ export function ServicesSection() {
   return (
     <section
       id="services"
-      className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-[var(--hair-soft)] relative"
+      className="py-20 sm:py-28 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 border-t border-[var(--hair-soft)] relative scroll-mt-16"
     >
       {/* Background ambient cyan glow */}
       <div
@@ -307,13 +307,13 @@ export function ServicesSection() {
 
       {/* Direct link to dedicated services page */}
       <div className="mt-14 text-center">
-        <Link
-          href="/services"
+        <a
+          href="#contact"
           className="btn btn--cyan px-7 py-3 rounded-xl font-semibold inline-flex items-center gap-2 shadow-[0_0_20px_rgba(0,210,238,0.25)] hover:shadow-[0_0_30px_rgba(0,210,238,0.4)] transition-all"
         >
-          <span>Explore All 3 Services &amp; Deliverables</span>
+          <span>Discuss Your Architecture &bull; Let&apos;s Build</span>
           <ArrowRight className="w-4 h-4" />
-        </Link>
+        </a>
       </div>
     </section>
   );

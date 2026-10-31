@@ -9,12 +9,12 @@ import {
 } from "@/types/portfolio";
 
 export const NAVIGATION_ITEMS: readonly NavItem[] = [
-  { label: "Home", href: "/" },
-  { label: "About", href: "/about" },
-  { label: "Services", href: "/services" },
-  { label: "Projects", href: "/projects" },
-  { label: "Our Approach", href: "/approach" },
-  { label: "Contact", href: "/contact" },
+  { label: "Home", href: "#home" },
+  { label: "Services", href: "#services" },
+  { label: "Our Approach", href: "#approach" },
+  { label: "Projects", href: "#projects" },
+  { label: "About", href: "#about" },
+  { label: "Contact", href: "#contact" },
 ];
 
 export const BRAND_INFO = {
